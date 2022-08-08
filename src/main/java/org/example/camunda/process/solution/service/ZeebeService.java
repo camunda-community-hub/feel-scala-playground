@@ -24,11 +24,13 @@ public class ZeebeService {
     return event.getBpmnProcessId();
   }
 
-  public String startProcess(String businessKey, String expression) {
+  public String startProcess(String... args) {
+    String businessKey = args[0];
+    String expression = args[1];
     final ProcessVariables variables =
         new ProcessVariables().setBusinessKey(businessKey).setExpression(expression);
 
-    // How do we update the DMN Decision with the expression??
+    // TODO: How do we update the DMN Decision with the expression??
 
     return startProcess(variables);
   }

@@ -4,18 +4,7 @@
 
 # FEEL Tutorial Backend
 
-This repository contains a Camunda 8 Java Spring Boot application that provides a Rest api for a FEEL Tutorial.
+This repository contains a Camunda 8 Java Spring Boot application that provides a Google Cloud Function
+implementation for an interactive FEEL Tutorial.
 
-## Using the Spring Boot application
-
-Swagger UI: [http://localhost:8080/swagger-ui.html](http://localhost:8080/swagger-ui.html)
-
-## Upstream
-
-Stay connected to improvements from upstream:
-
-```sh
-git remote add upstream git@github.com:camunda-community-hub/camunda-8-process-solution-template.git
-git pull upstream main
-git push
-```
+TODO: add documentation on how to compile, build, deploy and call google function
