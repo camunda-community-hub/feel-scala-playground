@@ -4,9 +4,9 @@
   <modelVersion>4.0.0</modelVersion>
 
   <name>Camunda Process Solution</name>
-  <description>A process solution for Camunda Platform 8</description>
-  <groupId>org.example.camunda.process.solution</groupId>
-  <artifactId>camunda-process-solution</artifactId>
+  <description>A backend for the FEEL Tutorial</description>
+  <groupId>camunda.io</groupId>
+  <artifactId>feel-tutorial</artifactId>
   <version>1.0.0-SNAPSHOT</version>
 
   <parent>
@@ -74,7 +74,7 @@
     </dependency>
 
   </dependencies>
-  
+
   <build>
     <plugins>
       <plugin>
