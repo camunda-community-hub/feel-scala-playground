@@ -11,6 +11,7 @@ public class ProcessVariables {
 
   private String businessKey;
   private Boolean result;
+  private String expression;
 
   public String getBusinessKey() {
     return businessKey;
@@ -27,6 +28,15 @@ public class ProcessVariables {
 
   public ProcessVariables setResult(Boolean result) {
     this.result = result;
+    return this;
+  }
+
+  public String getExpression() {
+    return expression;
+  }
+
+  public ProcessVariables setExpression(String expression) {
+    this.expression = expression;
     return this;
   }
 

@@ -1,8 +1,8 @@
 package org.example.camunda.process.solution.facade;
 
-import io.camunda.zeebe.client.ZeebeClient;
 import org.example.camunda.process.solution.ProcessConstants;
 import org.example.camunda.process.solution.ProcessVariables;
+import org.example.camunda.process.solution.service.ZeebeService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +17,7 @@ public class ProcessController {
 
   private static final Logger LOG = LoggerFactory.getLogger(ProcessController.class);
 
-  @Autowired private ZeebeClient zeebe;
+  @Autowired private ZeebeService zeebeService;
 
   @PostMapping("/start")
   public void startProcessInstance(@RequestBody ProcessVariables variables) {
@@ -25,11 +25,6 @@ public class ProcessController {
     LOG.info(
         "Starting process `" + ProcessConstants.BPMN_PROCESS_ID + "` with variables: " + variables);
 
-    zeebe
-        .newCreateInstanceCommand()
-        .bpmnProcessId(ProcessConstants.BPMN_PROCESS_ID)
-        .latestVersion()
-        .variables(variables)
-        .send();
+    zeebeService.startProcess(variables);
   }
 }
