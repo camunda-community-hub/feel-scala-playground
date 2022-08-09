@@ -31,3 +31,5 @@ out/
 ### VS Code ###
 .vscode/
 workspace.code-workspace
+
+src/test/resources/result.dmn
