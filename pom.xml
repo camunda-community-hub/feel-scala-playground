@@ -17,7 +17,7 @@
   </parent>
 
   <properties>
-    <java.version>8</java.version>
+    <java.version>17</java.version>
     <spring-zeebe.version>8.0.6</spring-zeebe.version>
     <zeebe.version>8.0.4</zeebe.version>
     <gcp.adapter.version>3.2.4</gcp.adapter.version>
