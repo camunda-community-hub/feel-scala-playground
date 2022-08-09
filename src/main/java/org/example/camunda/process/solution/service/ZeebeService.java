@@ -1,7 +1,7 @@
 package org.example.camunda.process.solution.service;
 
 import io.camunda.zeebe.client.ZeebeClient;
-import io.camunda.zeebe.client.api.response.ProcessInstanceEvent;
+import io.camunda.zeebe.client.api.response.ProcessInstanceResult;
 import org.example.camunda.process.solution.ProcessConstants;
 import org.example.camunda.process.solution.ProcessVariables;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,16 +12,20 @@ public class ZeebeService {
   @Autowired private ZeebeClient zeebe;
 
   public String startProcess(ProcessVariables variables) {
-    ProcessInstanceEvent event =
+    ProcessInstanceResult processInstanceResult =
         zeebe
             .newCreateInstanceCommand()
             .bpmnProcessId(ProcessConstants.BPMN_PROCESS_ID)
             .latestVersion()
             .variables(variables)
+            .withResult()
+            .fetchVariables(ProcessConstants.VARIABLE_NAME_RESULT)
             .send()
             .join();
 
-    return event.getBpmnProcessId();
+    final ProcessVariables processVariables =
+        processInstanceResult.getVariablesAsType(ProcessVariables.class);
+    return processVariables.getResult();
   }
 
   public String startProcess(String... args) {

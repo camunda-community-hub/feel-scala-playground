@@ -22,6 +22,6 @@ public class MyWorker {
     boolean result = true;
 
     return new ProcessVariables()
-        .setResult(result); // new object to avoid sending unchanged variables
+        .setResult("result"); // new object to avoid sending unchanged variables
   }
 }
