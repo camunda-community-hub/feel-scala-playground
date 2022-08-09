@@ -8,3 +8,17 @@ This repository contains a Camunda 8 Java Spring Boot application that provides 
 implementation for an interactive FEEL Tutorial.
 
 TODO: add documentation on how to compile, build, deploy and call google function
+
+# Deploy Google Function
+
+```shell
+mvn clean install
+
+gcloud functions deploy function-feel-tutorial-gcp-http \
+--entry-point org.springframework.cloud.function.adapter.gcp.GcfJarLauncher \
+--runtime java17 \
+--trigger-http \
+--source target/deploy \
+--memory 512MB
+```
+
