@@ -63,7 +63,7 @@ public class ProcessUnitTest {
     final var expression = "3 + 3";
 
     // when
-    final var generatedDmn = zeebeService.generateDmn(expression);
+    final var generatedDmn = zeebeService.generateDmn(expression, "decisionId");
 
     // then
     final var generatedDmnAsString =

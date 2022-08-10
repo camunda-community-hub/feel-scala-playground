@@ -1,5 +1,7 @@
 package org.example.camunda.process.solution.service;
 
+import static java.util.Map.entry;
+
 import com.samskivert.mustache.Mustache;
 import com.samskivert.mustache.MustacheException;
 import com.samskivert.mustache.Template;
@@ -10,6 +12,7 @@ import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 import javax.annotation.PostConstruct;
 import org.example.camunda.process.solution.ProcessVariables;
 import org.example.camunda.process.solution.config.FeelTutorialConfiguration;
@@ -53,9 +56,10 @@ public class ZeebeService {
     return processVariables.getResult();
   }
 
-  public InputStream generateDmn(String expression) {
+  public InputStream generateDmn(String expression, final String decisionId) {
     try {
-      final var templateData = Map.ofEntries(Map.entry("expression", expression));
+      final var templateData =
+          Map.ofEntries(entry("expression", expression), entry("decisionId", decisionId));
       final var generatedDmn = dmnTemplate.execute(templateData);
 
       return new ByteArrayInputStream(generatedDmn.getBytes(StandardCharsets.UTF_8));
@@ -71,7 +75,9 @@ public class ZeebeService {
   public String startProcess(
       String expression, Map<String, Object> context, Map<String, String> metadata) {
 
-    final var generatedDmn = generateDmn(expression);
+    final var decisionId = config.getDecisionId() + "_" + UUID.randomUUID().toString();
+
+    final var generatedDmn = generateDmn(expression, decisionId);
     deployDMN(generatedDmn, config.getDmnTemplateResource().getFilename());
 
     // TODO: How do we coordinate requests?
@@ -80,6 +86,7 @@ public class ZeebeService {
     //        new ProcessVariables().setExpression(expression);
 
     final Map<String, Object> variables = new HashMap<>();
+    variables.put("decisionId", decisionId);
     variables.putAll(context);
     variables.put("metadata", metadata);
 
