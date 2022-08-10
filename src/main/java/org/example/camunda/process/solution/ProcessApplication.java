@@ -2,7 +2,6 @@ package org.example.camunda.process.solution;
 
 import io.camunda.zeebe.spring.client.EnableZeebeClient;
 import io.camunda.zeebe.spring.client.annotation.ZeebeDeployment;
-import java.util.function.Function;
 import org.example.camunda.process.solution.service.ZeebeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
