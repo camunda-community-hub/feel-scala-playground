@@ -20,7 +20,9 @@ public class ProcessApplication {
   }
 
   @Bean
-  public Function<String[], String> startProcess() {
-    return strings -> zeebeService.startProcess(strings);
+  public Function<FeelEvaluationRequest, String> startProcess() {
+    return request ->
+        zeebeService.startProcess(
+            request.getExpression(), request.getContext(), request.getMetadata());
   }
 }

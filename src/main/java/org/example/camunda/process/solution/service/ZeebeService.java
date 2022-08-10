@@ -8,6 +8,7 @@ import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
+import java.util.HashMap;
 import java.util.Map;
 import javax.annotation.PostConstruct;
 import org.example.camunda.process.solution.ProcessVariables;
@@ -36,7 +37,7 @@ public class ZeebeService {
     }
   }
 
-  public String startProcess(ProcessVariables variables) {
+  public String startProcess(Map<String, Object> variables) {
     final var processInstanceResult =
         zeebe
             .newCreateInstanceCommand()
@@ -67,17 +68,20 @@ public class ZeebeService {
     zeebe.newDeployResourceCommand().addResourceStream(is, fileName).send().join();
   }
 
-  public String startProcess(String... args) {
-    String businessKey = args[0];
-    String expression = args[1];
+  public String startProcess(
+      String expression, Map<String, Object> context, Map<String, String> metadata) {
 
     final var generatedDmn = generateDmn(expression);
     deployDMN(generatedDmn, config.getDmnTemplateResource().getFilename());
 
     // TODO: How do we coordinate requests?
 
-    final var variables =
-        new ProcessVariables().setBusinessKey(businessKey).setExpression(expression);
+    //    final var variables =
+    //        new ProcessVariables().setExpression(expression);
+
+    final Map<String, Object> variables = new HashMap<>();
+    variables.putAll(context);
+    variables.put("metadata", metadata);
 
     return startProcess(variables);
   }
