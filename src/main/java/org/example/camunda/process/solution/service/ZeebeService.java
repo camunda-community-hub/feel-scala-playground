@@ -1,27 +1,40 @@
 package org.example.camunda.process.solution.service;
 
+import com.samskivert.mustache.Mustache;
+import com.samskivert.mustache.MustacheException;
+import com.samskivert.mustache.Template;
 import io.camunda.zeebe.client.ZeebeClient;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
+import java.io.ByteArrayInputStream;
 import java.io.InputStream;
-import java.util.Collection;
-import org.camunda.bpm.model.dmn.Dmn;
-import org.camunda.bpm.model.dmn.DmnModelInstance;
-import org.camunda.bpm.model.dmn.instance.Decision;
-import org.camunda.bpm.model.dmn.instance.LiteralExpression;
-import org.camunda.bpm.model.dmn.instance.Text;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
+import java.util.Map;
+import javax.annotation.PostConstruct;
 import org.example.camunda.process.solution.ProcessVariables;
 import org.example.camunda.process.solution.config.FeelTutorialConfiguration;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 
 @Service
 public class ZeebeService {
+
   @Autowired private ZeebeClient zeebe;
 
   @Autowired private FeelTutorialConfiguration config;
+
+  private Template dmnTemplate;
+
+  @PostConstruct
+  public void parseDmnTemplate() {
+    try {
+      final var inputStream = config.getDmnTemplateResource().getInputStream();
+      final var reader = new InputStreamReader(inputStream);
+
+      dmnTemplate = Mustache.compiler().compile(reader);
+    } catch (Exception e) {
+      throw new RuntimeException("Failed to read DMN template", e);
+    }
+  }
 
   public String startProcess(ProcessVariables variables) {
     final var processInstanceResult =
@@ -39,18 +52,15 @@ public class ZeebeService {
     return processVariables.getResult();
   }
 
-  public void updateDmn(Resource template, String expression, File outputFile) throws IOException {
+  public InputStream generateDmn(String expression) {
+    try {
+      final var templateData = Map.ofEntries(Map.entry("expression", expression));
+      final var generatedDmn = dmnTemplate.execute(templateData);
 
-    DmnModelInstance dmnModelInstance = Dmn.readModelFromStream(template.getInputStream());
-
-    Decision decision = dmnModelInstance.getModelElementById(config.getDecisionId());
-
-    LiteralExpression existingExpression = (LiteralExpression) decision.getExpression();
-    Collection<Text> texts = existingExpression.getChildElementsByType(Text.class);
-    Text text = texts.iterator().next();
-    text.setTextContent(expression);
-
-    Dmn.writeModelToFile(outputFile, dmnModelInstance);
+      return new ByteArrayInputStream(generatedDmn.getBytes(StandardCharsets.UTF_8));
+    } catch (MustacheException e) {
+      throw new RuntimeException("Failed to generate DMN", e);
+    }
   }
 
   public void deployDMN(InputStream is, String fileName) {
@@ -61,24 +71,14 @@ public class ZeebeService {
     String businessKey = args[0];
     String expression = args[1];
 
-    // TODO: Error handling ?
-    try {
-      File targetFile = File.createTempFile("feel", "dmn");
+    final var generatedDmn = generateDmn(expression);
+    deployDMN(generatedDmn, config.getDmnTemplateResource().getFilename());
 
-      Resource template = config.getDmnTemplateResource();
-      updateDmn(template, expression, targetFile);
+    // TODO: How do we coordinate requests?
 
-      deployDMN(new FileInputStream(targetFile), template.getFilename());
+    final var variables =
+        new ProcessVariables().setBusinessKey(businessKey).setExpression(expression);
 
-      // TODO: How do we coordinate requests?
-
-      final var variables =
-          new ProcessVariables().setBusinessKey(businessKey).setExpression(expression);
-
-      return startProcess(variables);
-
-    } catch (IOException e) {
-      throw new RuntimeException(e);
-    }
+    return startProcess(variables);
   }
 }

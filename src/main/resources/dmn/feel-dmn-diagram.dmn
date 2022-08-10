@@ -2,7 +2,7 @@
   <decision id="Decision_feel" name="FEEL Decision">
     <variable id="InformationItem_0mwk33d" name="result" typeRef="Any"/>
     <literalExpression id="LiteralExpression_1oqta4k">
-      <text>1 + 1</text>
+      <text>{{expression}}</text>
     </literalExpression>
   </decision>
   <dmndi:DMNDI>

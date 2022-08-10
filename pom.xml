@@ -21,16 +21,9 @@
     <spring-zeebe.version>8.0.6</spring-zeebe.version>
     <zeebe.version>8.0.4</zeebe.version>
     <gcp.adapter.version>3.2.4</gcp.adapter.version>
-    <dmn.version>7.17.0-ee</dmn.version>
   </properties>
 
   <dependencies>
-
-    <dependency>
-      <groupId>org.camunda.bpm.dmn</groupId>
-      <artifactId>camunda-engine-dmn</artifactId>
-      <version>${dmn.version}</version>
-    </dependency>
 
     <dependency>
       <groupId>org.springframework.cloud</groupId>
@@ -41,6 +34,11 @@
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-mustache</artifactId>
     </dependency>
 
     <dependency>
@@ -79,6 +77,12 @@
       <groupId>io.camunda</groupId>
       <artifactId>zeebe-process-test-extension-testcontainer</artifactId>
       <version>${zeebe.version}</version>
+      <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.assertj</groupId>
+      <artifactId>assertj-core</artifactId>
       <scope>test</scope>
     </dependency>
 

@@ -1,15 +1,14 @@
 package org.example.camunda.process.solution;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import io.camunda.zeebe.client.ZeebeClient;
 import java.io.*;
-import org.example.camunda.process.solution.config.FeelTutorialConfiguration;
+import java.nio.charset.StandardCharsets;
 import org.example.camunda.process.solution.service.ZeebeService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.core.io.Resource;
 
 @SpringBootTest(classes = ProcessApplication.class) // will deploy BPMN & DMN models
 public class ProcessUnitTest {
@@ -18,22 +17,41 @@ public class ProcessUnitTest {
 
   @Autowired private ZeebeService zeebeService;
 
-  @Autowired private FeelTutorialConfiguration config;
-
   @Test
-  public void testStartProcess() {
-    String result = zeebeService.startProcess("1", "2+2");
-    assertEquals("4", result);
+  public void shouldStartProcessWithNumericResult() {
+    // given
+    final var expression = "3+3";
 
-    result = zeebeService.startProcess("2", "3+3");
-    assertEquals("6", result);
+    // when
+    final var result = zeebeService.startProcess("2", expression);
+
+    // then
+    assertThat(result).isEqualTo("6");
   }
 
   @Test
-  public void testUpdateDMN() throws IOException {
-    File targetFile = new File("src/test/resources/result.dmn");
-    Resource template = config.getDmnTemplateResource();
-    assertEquals("feel-dmn-diagram.dmn", template.getFilename());
-    zeebeService.updateDmn(template, "3+3", targetFile);
+  public void shouldStartProcessWithStringResult() {
+    // given
+    final var expression = "\"Hello world\"";
+
+    // when
+    final var result = zeebeService.startProcess("2", expression);
+
+    // then
+    assertThat(result).isEqualTo("Hello world");
+  }
+
+  @Test
+  public void shouldGenerateDMN() throws IOException {
+    // given
+    final var expression = "3 + 3";
+
+    // when
+    final var generatedDmn = zeebeService.generateDmn(expression);
+
+    // then
+    final var generatedDmnAsString =
+        new String(generatedDmn.readAllBytes(), StandardCharsets.UTF_8);
+    assertThat(generatedDmnAsString).contains(expression);
   }
 }
