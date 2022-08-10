@@ -56,7 +56,17 @@ kubectl port-forward svc/feel-tutorial-service 8080:8080 -n feel
 
 # Clean up
 
+To delete the pod (before redeploy):
+```shell
+kubectl delete pod feel-tutorial-pod -n feel
+```
+
+To completely clear out all kubernetes objects related to feel:
 ```shell
 kubectl delete namespace feel
 ```
+
+
+
+
 
