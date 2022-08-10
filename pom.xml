@@ -21,19 +21,19 @@
     <spring-zeebe.version>8.0.6</spring-zeebe.version>
     <zeebe.version>8.0.4</zeebe.version>
     <gcp.adapter.version>3.2.4</gcp.adapter.version>
+    <dmn.version>7.17.0-ee</dmn.version>
   </properties>
 
   <dependencies>
 
     <dependency>
-      <groupId>org.springframework.cloud</groupId>
-      <artifactId>spring-cloud-function-adapter-gcp</artifactId>
-      <version>${gcp.adapter.version}</version>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter</artifactId>
     </dependency>
 
     <dependency>
       <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-starter</artifactId>
+      <artifactId>spring-boot-starter-web</artifactId>
     </dependency>
 
     <dependency>
@@ -93,16 +93,6 @@
       <plugin>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-maven-plugin</artifactId>
-        <configuration>
-          <outputDirectory>target/deploy</outputDirectory>
-        </configuration>
-        <dependencies>
-          <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-function-adapter-gcp</artifactId>
-            <version>${gcp.adapter.version}</version>
-          </dependency>
-        </dependencies>
       </plugin>
       <!-- Google code format plugin -->
       <plugin>
@@ -116,15 +106,6 @@
             </goals>
           </execution>
         </executions>
-      </plugin>
-      <plugin>
-        <groupId>com.google.cloud.functions</groupId>
-        <artifactId>function-maven-plugin</artifactId>
-        <version>0.10.0</version>
-        <configuration>
-          <functionTarget>org.springframework.cloud.function.adapter.gcp.GcfJarLauncher</functionTarget>
-          <port>8080</port>
-        </configuration>
       </plugin>
     </plugins>
   </build>
