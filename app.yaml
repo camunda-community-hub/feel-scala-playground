@@ -7,7 +7,7 @@ metadata:
 spec:
   containers:
     - name: nginx-container
-      image: upgradingdave/feel-tutorial:1.0.0
+      image: upgradingdave/feel-tutorial:1.0.1
       env:
         - name: ZEEBE_BASE_URL
           valueFrom:
@@ -39,16 +39,4 @@ spec:
             secretKeyRef:
               name: feel-tutorial
               key: zeebe.client.cloud.clientSecret
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: feel-tutorial-service
-spec:
-  type: NodePort
-  ports:
-    - targetPort: 8080
-      port: 8080
-      nodePort: 30008
-  selector:
-    app: feel-tutorial
+
