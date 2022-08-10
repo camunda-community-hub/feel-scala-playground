@@ -7,7 +7,9 @@
 This repository contains a Camunda 8 Java Spring Boot application that provides a Rest API backend
 for an interactive FEEL Tutorial.
 
-TODO: add documentation on how to compile, build, deploy and call google function
+After starting the app, you should be able to access the swagger ui here:
+
+http://<host>:<port>/swagger-ui/index.html#/process-controller/startProcessInstance
 
 # (Re) Create Docker Image
 
