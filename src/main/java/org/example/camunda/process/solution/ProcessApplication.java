@@ -23,15 +23,12 @@ public class ProcessApplication {
   }
 
   @Bean
-  public Function<Message<?>, Message<?>> enableCors() {
-    return message -> {
+  public Function<?, Message<?>> enableCors() {
+    return payload -> {
       System.out.println("> enable CORS");
-      System.out.println("> headers: " + message.getHeaders());
-      return MessageBuilder.fromMessage(message)
-          //          .withPayload(message.getPayload())
-          //          .copyHeaders(message.getHeaders())
-          .setHeader("Access-Control-Allow-Origin", "*")
-          .setHeader("Access-Control-Allow-Methods", "POST")
+      return MessageBuilder.withPayload(payload)
+          //          .setHeader("Access-Control-Allow-Origin", "*")
+          //          .setHeader("Access-Control-Allow-Methods", "POST")
           .build();
     };
   }
