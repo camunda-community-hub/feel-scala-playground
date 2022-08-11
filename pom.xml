@@ -92,16 +92,6 @@
       <plugin>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-maven-plugin</artifactId>
-        <configuration>
-          <outputDirectory>target/deploy</outputDirectory>
-        </configuration>
-        <dependencies>
-          <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-function-adapter-gcp</artifactId>
-            <version>${gcp.adapter.version}</version>
-          </dependency>
-        </dependencies>
       </plugin>
       <!-- Google code format plugin -->
       <plugin>
