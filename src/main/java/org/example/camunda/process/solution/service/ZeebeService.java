@@ -7,6 +7,8 @@ import com.samskivert.mustache.MustacheException;
 import com.samskivert.mustache.Template;
 import io.camunda.zeebe.client.ZeebeClient;
 import io.camunda.zeebe.client.api.command.ClientStatusException;
+import io.grpc.Status;
+import io.grpc.Status.Code;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -94,11 +96,7 @@ public class ZeebeService {
     try {
       deployDMN(generatedDmn, config.getDmnTemplateResource().getFilename());
     } catch (ClientStatusException e) {
-      final var clientFailureMessage = e.getMessage();
-      final var shortenedMessage = clientFailureMessage.replace(
-          REJECTION_PREFIX_FEEL_EXPRESSION, ""
-      );
-      return FeelEvaluationResponse.withError(shortenedMessage);
+      return handleClientException(e);
     }
 
     final Map<String, Object> variables = new HashMap<>();
@@ -106,7 +104,26 @@ public class ZeebeService {
     variables.putAll(context);
     variables.put("metadata", metadata);
 
-    final var resultValue = startProcess(variables);
-    return FeelEvaluationResponse.withResult(resultValue);
+    try {
+      final var resultValue = startProcess(variables);
+      return FeelEvaluationResponse.withResult(resultValue);
+    } catch (ClientStatusException e) {
+      return handleClientException(e);
+    }
+  }
+
+  private FeelEvaluationResponse handleClientException(ClientStatusException e) {
+    if (e.getStatusCode() == Code.DEADLINE_EXCEEDED) {
+      return FeelEvaluationResponse.withError("Time out");
+    } else if (e.getStatusCode() == Code.RESOURCE_EXHAUSTED) {
+      return FeelEvaluationResponse.withError("Resource exhausted. Try it later again.");
+    } else if (e.getStatusCode() == Code.INVALID_ARGUMENT) {
+      final var shortenedMessage = e.getMessage().replace(
+          REJECTION_PREFIX_FEEL_EXPRESSION, ""
+      );
+      return FeelEvaluationResponse.withError(shortenedMessage);
+    } else {
+      return FeelEvaluationResponse.withError(e.getMessage());
+    }
   }
 }
