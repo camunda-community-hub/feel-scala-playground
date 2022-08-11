@@ -11,6 +11,8 @@ After starting the app, you should be able to access the swagger ui here:
 
 http://<host>:<port>/swagger-ui/index.html#/process-controller/startProcessInstance
 
+http://feel.upgradingdave.com/swagger-ui/index.html#/process-controller/startProcessInstance
+
 # (Re) Create Docker Image
 
 ```shell
@@ -36,7 +38,11 @@ docker-compose -f ./docker-compose.feel-tutorial.yml up -d --build
 
 # Deploy to Kubernetes Cluster
 
+The following commands do some setup and should only be needed as a "one time" setup
+
 ```shell
+cd k8s
+
 kubectl create namespace feel
 
 kubectl create secret generic feel-tutorial \
@@ -48,11 +54,52 @@ kubectl create secret generic feel-tutorial \
 --from-literal=zeebe.client.cloud.clientSecret=xxx \
 --namespace feel
 
-kubectl apply -f app.yaml --namespace feel
-
-kubectl port-forward svc/feel-tutorial-service 8080:8080 -n feel
-
+kubectl apply -f service.yaml -n feel
 ```
+
+To deploy a new version or the rest api, edit `deployment.yaml` and set `spec.template.spec.containers[0].img` to point
+to the latest docker image. Then run the following:
+
+```shell
+kubectl apply -f deployment.yaml -n feel
+```
+
+At this point, you should be able to port forward to the service. Run this:
+
+    kubectl port-forward svc/feel-tutorial-service 8080:8080 -n feel
+
+Then try accessing the service here: http://localhost:8080/swagger-ui/index.html#/process-controller/startProcessInstance
+
+To setup load balancing, we need a static ip address. Here's the gcloud command to create an ip address.
+
+Note that there are subtle differences between regional vs global ip addresses that I still don't fully understand!
+
+First, check if the ip address already exists:
+
+    gcloud compute addresses describe feel-tutorial-ip --global
+    # 34.111.164.116
+
+If needed, create a new static ip like so:
+
+    gcloud compute addresses create feel-tutorial-ip --global
+
+To setup ssl, first edit `managedCert.yaml` and update the domain names you'd like to use, then create a managed
+certificate object by running this:
+
+    kubectl apply -f managedCert.yaml -n feel
+
+Finally, create the ingress. The ingress is configured to use the static ip and managed certificate.
+
+    kubectl apply -f ingress.yaml -n feel
+
+Note: currently the app responds with a 404 at the root url `/`. Google Load balancer will think the app is not
+responding. So, after the ingress starts, go to the google console, search for "Load Balancers", and click on the load balancer
+for this feel-tutorial. Click on the Health Check and edit the path to be `/actuator/health`.
+
+Check on status of ingress and ssl certificate:
+
+    kubectl describe ingress feel-tutorial-ingress -n feel
+    kubectl describe managedcertificate managed-cert -n feel
 
 # Clean up
 

@@ -15,3 +15,4 @@ spec:
     app: feel-tutorial
   sessionAffinity: None
   type: LoadBalancer
+  loadBalancerIP: "34.138.37.53"
