@@ -10,10 +10,12 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.support.MessageBuilder;
+import org.springframework.web.bind.annotation.CrossOrigin;
 
 @SpringBootApplication
 @EnableZeebeClient
 @ZeebeDeployment(resources = "classpath*:/models/*.*")
+@CrossOrigin()
 public class ProcessApplication {
 
   @Autowired ZeebeService zeebeService;

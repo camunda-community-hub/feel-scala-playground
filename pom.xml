@@ -122,8 +122,14 @@
         <artifactId>function-maven-plugin</artifactId>
         <version>0.10.0</version>
         <configuration>
+          <name>function-feel-tutorial-gcp-http</name>
           <functionTarget>org.springframework.cloud.function.adapter.gcp.GcfJarLauncher</functionTarget>
           <port>8080</port>
+          <runtime>java17</runtime>
+          <triggerHttp>true</triggerHttp>
+          <source>target/deploy</source>
+          <memory>512MB</memory>
+          <allowUnauthenticated>true</allowUnauthenticated>
         </configuration>
       </plugin>
     </plugins>
