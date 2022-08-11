@@ -39,4 +39,12 @@ public final class FeelEvaluationResponse {
     response.setError(error);
     return response;
   }
+
+  @Override
+  public String toString() {
+    return "FeelEvaluationResponse{" +
+        "result=" + result +
+        ", error='" + error + '\'' +
+        '}';
+  }
 }

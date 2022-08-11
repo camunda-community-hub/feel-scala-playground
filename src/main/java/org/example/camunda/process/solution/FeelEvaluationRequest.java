@@ -31,4 +31,13 @@ public class FeelEvaluationRequest {
   public void setMetadata(final Map<String, String> metadata) {
     this.metadata = metadata;
   }
+
+  @Override
+  public String toString() {
+    return "FeelEvaluationRequest{" +
+        "expression='" + expression + '\'' +
+        ", context=" + context +
+        ", metadata=" + metadata +
+        '}';
+  }
 }
