@@ -15,6 +15,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 import javax.annotation.PostConstruct;
+import org.example.camunda.process.solution.FeelEvaluationResponse;
 import org.example.camunda.process.solution.ProcessVariables;
 import org.example.camunda.process.solution.config.FeelTutorialConfiguration;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,9 +24,13 @@ import org.springframework.stereotype.Service;
 @Service
 public class ZeebeService {
 
-  @Autowired private ZeebeClient zeebe;
+  private static final String REJECTION_PREFIX_FEEL_EXPRESSION = "Command 'CREATE' rejected with code 'INVALID_ARGUMENT': Expected to deploy new resources, but encountered the following errors:\nFEEL expression: ";
 
-  @Autowired private FeelTutorialConfiguration config;
+  @Autowired
+  private ZeebeClient zeebe;
+
+  @Autowired
+  private FeelTutorialConfiguration config;
 
   private Template dmnTemplate;
 
@@ -41,7 +46,7 @@ public class ZeebeService {
     }
   }
 
-  public String startProcess(Map<String, Object> variables) {
+  public Object startProcess(Map<String, Object> variables) {
     final var processInstanceResult =
         zeebe
             .newCreateInstanceCommand()
@@ -54,7 +59,14 @@ public class ZeebeService {
             .join();
 
     final var processVariables = processInstanceResult.getVariablesAsType(ProcessVariables.class);
-    return processVariables.getResult();
+    final var resultValue = processVariables.getResult();
+
+    if (resultValue != null) {
+      return resultValue;
+    } else {
+      // return `null` as string to differentiate to no result
+      return "null";
+    }
   }
 
   public InputStream generateDmn(String expression, final String decisionId) {
@@ -73,7 +85,7 @@ public class ZeebeService {
     zeebe.newDeployResourceCommand().addResourceStream(is, fileName).send().join();
   }
 
-  public String startProcess(
+  public FeelEvaluationResponse startProcess(
       String expression, Map<String, Object> context, Map<String, String> metadata) {
 
     final var decisionId = config.getDecisionId() + "_" + UUID.randomUUID().toString();
@@ -82,7 +94,11 @@ public class ZeebeService {
     try {
       deployDMN(generatedDmn, config.getDmnTemplateResource().getFilename());
     } catch (ClientStatusException e) {
-      return e.getMessage().replace("Command 'CREATE' rejected with code 'INVALID_ARGUMENT': Expected to deploy new resources, but encountered the following errors:\nFEEL expression: ", "");
+      final var clientFailureMessage = e.getMessage();
+      final var shortenedMessage = clientFailureMessage.replace(
+          REJECTION_PREFIX_FEEL_EXPRESSION, ""
+      );
+      return FeelEvaluationResponse.withError(shortenedMessage);
     }
 
     final Map<String, Object> variables = new HashMap<>();
@@ -90,6 +106,7 @@ public class ZeebeService {
     variables.putAll(context);
     variables.put("metadata", metadata);
 
-    return startProcess(variables);
+    final var resultValue = startProcess(variables);
+    return FeelEvaluationResponse.withResult(resultValue);
   }
 }

@@ -1,6 +1,7 @@
 package org.example.camunda.process.solution.facade;
 
 import org.example.camunda.process.solution.FeelEvaluationRequest;
+import org.example.camunda.process.solution.FeelEvaluationResponse;
 import org.example.camunda.process.solution.config.FeelTutorialConfiguration;
 import org.example.camunda.process.solution.service.ZeebeService;
 import org.slf4j.Logger;
@@ -17,18 +18,30 @@ public class ProcessController {
 
   private static final Logger LOG = LoggerFactory.getLogger(ProcessController.class);
 
-  @Autowired private ZeebeService zeebeService;
+  @Autowired
+  private ZeebeService zeebeService;
 
-  @Autowired private FeelTutorialConfiguration config;
+  @Autowired
+  private FeelTutorialConfiguration config;
 
   @PostMapping("/start")
-  public ResponseEntity<String> startProcessInstance(@RequestBody FeelEvaluationRequest request) {
+  public ResponseEntity<FeelEvaluationResponse> startProcessInstance(
+      @RequestBody FeelEvaluationRequest request) {
 
     LOG.info("Starting process `" + config.getBpmProcessId() + "` with variables: " + request);
 
-    return new ResponseEntity<>(
-        zeebeService.startProcess(
-            request.getExpression(), request.getContext(), request.getMetadata()),
-        HttpStatus.OK);
+    try {
+      final var response = zeebeService.startProcess(
+          request.getExpression(), request.getContext(), request.getMetadata());
+
+      return new ResponseEntity<>(
+          response,
+          HttpStatus.OK);
+
+    } catch (Exception e) {
+      return new ResponseEntity<>(
+          FeelEvaluationResponse.withError(e.getMessage()),
+          HttpStatus.OK);
+    }
   }
 }

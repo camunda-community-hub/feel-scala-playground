@@ -10,7 +10,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 public class ProcessVariables {
 
   private String businessKey;
-  private String result;
+  private Object result;
   private String expression;
 
   public String getBusinessKey() {
@@ -22,11 +22,11 @@ public class ProcessVariables {
     return this;
   }
 
-  public String getResult() {
+  public Object getResult() {
     return result;
   }
 
-  public ProcessVariables setResult(String result) {
+  public ProcessVariables setResult(Object result) {
     this.result = result;
     return this;
   }
