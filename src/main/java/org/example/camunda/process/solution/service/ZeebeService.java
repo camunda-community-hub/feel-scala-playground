@@ -6,6 +6,7 @@ import com.samskivert.mustache.Mustache;
 import com.samskivert.mustache.MustacheException;
 import com.samskivert.mustache.Template;
 import io.camunda.zeebe.client.ZeebeClient;
+import io.camunda.zeebe.client.api.command.ClientStatusException;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -78,12 +79,11 @@ public class ZeebeService {
     final var decisionId = config.getDecisionId() + "_" + UUID.randomUUID().toString();
 
     final var generatedDmn = generateDmn(expression, decisionId);
-    deployDMN(generatedDmn, config.getDmnTemplateResource().getFilename());
-
-    // TODO: How do we coordinate requests?
-
-    //    final var variables =
-    //        new ProcessVariables().setExpression(expression);
+    try {
+      deployDMN(generatedDmn, config.getDmnTemplateResource().getFilename());
+    } catch (ClientStatusException e) {
+      return e.getMessage().replace("Command 'CREATE' rejected with code 'INVALID_ARGUMENT': Expected to deploy new resources, but encountered the following errors:\nFEEL expression: ", "");
+    }
 
     final Map<String, Object> variables = new HashMap<>();
     variables.put("decisionId", decisionId);

@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: feel-tutorial-loadbalancer
+  namespace: feel
+spec:
+  externalTrafficPolicy: Cluster
+  ports:
+  - name: http
+    nodePort: 32265
+    port: 80
+    protocol: TCP
+    targetPort: 8080
+  selector:
+    app: feel-tutorial
+  sessionAffinity: None
+  type: LoadBalancer

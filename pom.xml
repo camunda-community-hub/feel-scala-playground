@@ -26,14 +26,13 @@
   <dependencies>
 
     <dependency>
-      <groupId>org.springframework.cloud</groupId>
-      <artifactId>spring-cloud-function-adapter-gcp</artifactId>
-      <version>${gcp.adapter.version}</version>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter</artifactId>
     </dependency>
 
     <dependency>
       <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-starter</artifactId>
+      <artifactId>spring-boot-starter-web</artifactId>
     </dependency>
 
     <dependency>
@@ -116,21 +115,6 @@
             </goals>
           </execution>
         </executions>
-      </plugin>
-      <plugin>
-        <groupId>com.google.cloud.functions</groupId>
-        <artifactId>function-maven-plugin</artifactId>
-        <version>0.10.0</version>
-        <configuration>
-          <name>function-feel-tutorial-gcp-http</name>
-          <functionTarget>org.springframework.cloud.function.adapter.gcp.GcfJarLauncher</functionTarget>
-          <port>8080</port>
-          <runtime>java17</runtime>
-          <triggerHttp>true</triggerHttp>
-          <source>target/deploy</source>
-          <memory>512MB</memory>
-          <allowUnauthenticated>true</allowUnauthenticated>
-        </configuration>
       </plugin>
     </plugins>
   </build>
