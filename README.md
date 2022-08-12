@@ -7,13 +7,24 @@
 This repository contains a Camunda 8 Java Spring Boot application that provides a Rest API backend
 for an interactive FEEL Tutorial.
 
-After starting the app, you should be able to access the swagger ui here:
-
-http://<host>:<port>/swagger-ui/index.html#/process-controller/startProcessInstance
+The app is currently hosted here:
 
 http://feel.upgradingdave.com/swagger-ui/index.html#/process-controller/startProcessInstance
 
+# Compile and Build
+
+This is a Spring Boot App. Use `mvn clean install` or your IDE to build and compile.
+
+Start the app by running the main method inside `ProcessApplication.java`.
+
+After starting the app, you should be able to access the swagger ui here:
+
+http://localhost:8080/swagger-ui/index.html#/process-controller/startProcessInstance
+
 # (Re) Create Docker Image
+
+In order to deploy to kubernetes, we first need to build a Docker image. The `buildx` commands below will build images
+compatible with both ARM and AMD processor architectures.
 
 ```shell
 docker buildx create --use
@@ -27,10 +38,12 @@ docker run -d -t -i -e ZEEBE_BASE_URL='zeebe.ultrawombat.com' \
 -e ZEEBE_CLIENT_SECRET='xxx' \
 -p 8080:8080 \
 --name feel-tutorial upgradingdave/feel-tutorial:main
-
 ```
 
 # Test in Docker Compose
+
+To test running the docker image locally, update `docker-compose.feel-tutorial.yaml` with your cluster credentials. Then
+run:
 
 ```shell
 docker-compose -f ./docker-compose.feel-tutorial.yml up -d --build
@@ -38,7 +51,9 @@ docker-compose -f ./docker-compose.feel-tutorial.yml up -d --build
 
 # Deploy to Kubernetes Cluster
 
-The following commands do some setup and should only be needed as a "one time" setup
+The following notes describe how to deploy to Google Cloud Kubernetes Cluster
+
+First, do some setup (this should only be needed as a "one time" setup)
 
 ```shell
 cd k8s
@@ -57,7 +72,7 @@ kubectl create secret generic feel-tutorial \
 kubectl apply -f service.yaml -n feel
 ```
 
-To deploy a new version or the rest api, edit `deployment.yaml` and set `spec.template.spec.containers[0].img` to point
+To deploy the rest api, edit `deployment.yaml` and set `spec.template.spec.containers[0].img` to point
 to the latest docker image. Then run the following:
 
 ```shell
@@ -71,8 +86,6 @@ At this point, you should be able to port forward to the service. Run this:
 Then try accessing the service here: http://localhost:8080/swagger-ui/index.html#/process-controller/startProcessInstance
 
 To setup load balancing, we need a static ip address. Here's the gcloud command to create an ip address.
-
-Note that there are subtle differences between regional vs global ip addresses that I still don't fully understand!
 
 First, check if the ip address already exists:
 

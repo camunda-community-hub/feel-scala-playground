@@ -21,9 +21,9 @@ services:
       ZEEBE_BASE_URL: zeebe.ultrawombat.com
       ZEEBE_AUTH_URL: https://login.cloud.ultrawombat.com/oauth/token
       ZEEBE_REGION: bru-2
-      ZEEBE_CLUSTER_ID: 8a992fca-ea6e-4ec6-b5ff-4773fae19d20
-      ZEEBE_CLIENT_ID: -JemRlKAjNZRINgPwjrXTUqfKIUcSKkT
-      ZEEBE_CLIENT_SECRET: ODkEj77NWUxAr.d2iSIZpLk38O91H~2tJ1NdRNRo-xd3~gRyarrJn0M_xdVdW4kS
+      ZEEBE_CLUSTER_ID: xxx
+      ZEEBE_CLIENT_ID: xxx
+      ZEEBE_CLIENT_SECRET: xxx
     deploy:
       resources:
         limits:

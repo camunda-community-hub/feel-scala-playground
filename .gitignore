@@ -33,3 +33,4 @@ out/
 workspace.code-workspace
 
 src/test/resources/result.dmn
+.DS_Store
