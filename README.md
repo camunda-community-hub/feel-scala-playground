@@ -112,7 +112,7 @@ for this feel-tutorial. Click on the Health Check and edit the path to be `/actu
 Check on status of ingress and ssl certificate:
 
     kubectl describe ingress feel-tutorial-ingress -n feel
-    kubectl describe managedcertificate managed-cert -n feel
+    kubectl describe managedcertificate feel-service-managed-cert -n feel
 
 # Clean up
 
@@ -125,8 +125,3 @@ To completely clear out all kubernetes objects related to feel:
 ```shell
 kubectl delete namespace feel
 ```
-
-
-
-
-

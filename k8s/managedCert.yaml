@@ -1,7 +1,7 @@
 apiVersion: networking.gke.io/v1
 kind: ManagedCertificate
 metadata:
-  name: managed-cert
+  name: feel-service-managed-cert
 spec:
   domains:
-    - feel.upgradingdave.com
+    - feel-service.camunda.com
