@@ -18,8 +18,6 @@
 
   <properties>
     <java.version>17</java.version>
-    <spring-zeebe.version>8.0.6</spring-zeebe.version>
-    <zeebe.version>8.0.4</zeebe.version>
     <gcp.adapter.version>3.2.4</gcp.adapter.version>
     <feel.version>1.16.0</feel.version>
   </properties>

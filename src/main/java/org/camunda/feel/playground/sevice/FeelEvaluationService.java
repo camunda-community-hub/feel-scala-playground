@@ -7,6 +7,7 @@
  */
 package org.camunda.feel.playground.sevice;
 
+import java.util.HashMap;
 import java.util.Map;
 import org.camunda.feel.FeelEngine;
 import org.camunda.feel.impl.JavaValueMapper;
@@ -29,4 +30,20 @@ public final class FeelEvaluationService {
       throw new RuntimeException(failure.message());
     }
   }
+
+  public Object evaluateUnaryTests(String expression, Object inputValue, Map<String, Object> context) {
+    final var contextWithInput = new HashMap<>(context);
+    contextWithInput.put("cellInput", inputValue); // FeelEngine.UnaryTests.defaultInputVariable()
+
+    final var evaluationResult = feelEngine.evalUnaryTests(expression, contextWithInput);
+
+    if (evaluationResult.isRight()) {
+      return evaluationResult.right().get();
+
+    } else {
+      final var failure = evaluationResult.left().get();
+      throw new RuntimeException(failure.message());
+    }
+  }
+
 }
