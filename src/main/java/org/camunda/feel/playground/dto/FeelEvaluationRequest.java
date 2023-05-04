@@ -1,4 +1,4 @@
-package org.example.camunda.process.solution;
+package org.camunda.feel.playground.dto;
 
 import java.util.Map;
 
@@ -34,10 +34,14 @@ public class FeelEvaluationRequest {
 
   @Override
   public String toString() {
-    return "FeelEvaluationRequest{" +
-        "expression='" + expression + '\'' +
-        ", context=" + context +
-        ", metadata=" + metadata +
-        '}';
+    return "FeelEvaluationRequest{"
+        + "expression='"
+        + expression
+        + '\''
+        + ", context="
+        + context
+        + ", metadata="
+        + metadata
+        + '}';
   }
 }

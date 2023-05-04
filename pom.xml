@@ -21,9 +21,16 @@
     <spring-zeebe.version>8.0.6</spring-zeebe.version>
     <zeebe.version>8.0.4</zeebe.version>
     <gcp.adapter.version>3.2.4</gcp.adapter.version>
+    <feel.version>1.16.0</feel.version>
   </properties>
 
   <dependencies>
+
+    <dependency>
+      <groupId>org.camunda.feel</groupId>
+      <artifactId>feel-engine</artifactId>
+      <version>${feel.version}</version>
+    </dependency>
 
     <dependency>
       <groupId>org.springframework.boot</groupId>
@@ -37,24 +44,7 @@
 
     <dependency>
       <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-starter-mustache</artifactId>
-    </dependency>
-
-    <dependency>
-      <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-actuator</artifactId>
-    </dependency>
-
-    <dependency>
-      <groupId>io.camunda</groupId>
-      <artifactId>zeebe-client-java</artifactId>
-      <version>${zeebe.version}</version>
-    </dependency>
-
-    <dependency>
-      <groupId>io.camunda</groupId>
-      <artifactId>spring-zeebe-starter</artifactId>
-      <version>${spring-zeebe.version}</version>
     </dependency>
 
     <dependency>
@@ -66,21 +56,6 @@
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-test</artifactId>
-      <scope>test</scope>
-    </dependency>
-
-    <dependency>
-      <groupId>io.camunda</groupId>
-      <artifactId>spring-zeebe-test-testcontainer</artifactId>
-      <version>${spring-zeebe.version}</version>
-      <scope>test</scope>
-    </dependency>
-
-    <dependency>
-      <!-- see: https://docs.camunda.io/docs/components/best-practices/development/testing-process-definitions/#writing-process-tests-in-java -->
-      <groupId>io.camunda</groupId>
-      <artifactId>zeebe-process-test-extension-testcontainer</artifactId>
-      <version>${zeebe.version}</version>
       <scope>test</scope>
     </dependency>
 

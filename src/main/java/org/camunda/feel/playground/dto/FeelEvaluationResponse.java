@@ -5,7 +5,7 @@
  * Licensed under the Zeebe Community License 1.1. You may not use this file
  * except in compliance with the Zeebe Community License 1.1.
  */
-package org.example.camunda.process.solution;
+package org.camunda.feel.playground.dto;
 
 public final class FeelEvaluationResponse {
 
@@ -42,9 +42,6 @@ public final class FeelEvaluationResponse {
 
   @Override
   public String toString() {
-    return "FeelEvaluationResponse{" +
-        "result=" + result +
-        ", error='" + error + '\'' +
-        '}';
+    return "FeelEvaluationResponse{" + "result=" + result + ", error='" + error + '\'' + '}';
   }
 }
