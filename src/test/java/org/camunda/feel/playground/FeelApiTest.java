@@ -89,4 +89,14 @@ public final class FeelApiTest {
     assertThat(content).contains("\"error\":\"failed to parse expression");
   }
 
+  @Test
+  void shouldEvaluateUnaryTests() throws Exception {
+    mvc.perform(
+            post("/api/v1/feel-unary-tests/evaluate")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("{\"expression\": \"> x\", \"inputValue\": 5, \"context\": {\"x\": 2}}"))
+        .andExpect(status().isOk())
+        .andExpect(content().json("{'result': true}"));
+  }
+
 }
