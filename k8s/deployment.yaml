@@ -1,54 +1,23 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: feel-tutorial
+  name: feel-scala-playground
 spec:
   selector:
     matchLabels:
-      app: feel-tutorial
+      app: feel-scala-playground
   replicas: 1
   template:
     metadata:
       labels:
-        app: feel-tutorial
+        app: feel-scala-playground
     spec:
       containers:
         - name: feel-container
-          image: docker.io/upgradingdave/feel-tutorial@sha256:927af94867a93ca0ed56dcf7f359078eeb2355c91693c3554a46662f239833d0
+          image: ghcr.io/camunda-community-hub/feel-scala-playground:latest
           readinessProbe:
             httpGet:
               path: "/actuator/health"
               port: 8080
             initialDelaySeconds: 10
             timeoutSeconds: 5
-          env:
-            - name: ZEEBE_BASE_URL
-              valueFrom:
-                secretKeyRef:
-                  name: feel-tutorial
-                  key: zeebe.client.cloud.base-url
-            - name: ZEEBE_AUTH_URL
-              valueFrom:
-                secretKeyRef:
-                  name: feel-tutorial
-                  key: zeebe.client.cloud.auth-url
-            - name: ZEEBE_REGION
-              valueFrom:
-                secretKeyRef:
-                  name: feel-tutorial
-                  key: zeebe.client.cloud.region
-            - name: ZEEBE_CLUSTER_ID
-              valueFrom:
-                secretKeyRef:
-                  name: feel-tutorial
-                  key: zeebe.client.cloud.clusterId
-            - name: ZEEBE_CLIENT_ID
-              valueFrom:
-                secretKeyRef:
-                  name: feel-tutorial
-                  key: zeebe.client.cloud.clientId
-            - name: ZEEBE_CLIENT_SECRET
-              valueFrom:
-                secretKeyRef:
-                  name: feel-tutorial
-                  key: zeebe.client.cloud.clientSecret

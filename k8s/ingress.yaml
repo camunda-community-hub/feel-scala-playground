@@ -1,14 +1,14 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: feel-tutorial-ingress
+  name: feel-scala-playground-ingress
   annotations:
-    kubernetes.io/ingress.global-static-ip-name: feel-tutorial-ip
+    kubernetes.io/ingress.global-static-ip-name: feel-scala-playground-ip
     networking.gke.io/managed-certificates: feel-service-managed-cert
     kubernetes.io/ingress.class: "gce"
 spec:
   defaultBackend:
     service:
-      name: feel-tutorial-service
+      name: feel-scala-playground-service
       port:
         number: 8080
