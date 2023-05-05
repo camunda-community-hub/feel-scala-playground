@@ -72,19 +72,23 @@ public final class FeelApiTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{\"expression\": \"x\", \"context\": {}}"))
         .andExpect(status().isOk())
-        .andExpect(content().json("{'error': \"failed to evaluate expression 'x': no variable found for name 'x'\"}"));
+        .andExpect(
+            content()
+                .json(
+                    "{'error': \"failed to evaluate expression 'x': no variable found for name 'x'\"}"));
   }
 
   @Test
   void shouldReturnParsingFailure() throws Exception {
-    final var content = mvc.perform(
-            post("/api/v1/feel/evaluate")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content("{\"expression\": \"1 == 2\", \"context\": {}}"))
-        .andExpect(status().isOk())
-        .andReturn()
-        .getResponse()
-        .getContentAsString();
+    final var content =
+        mvc.perform(
+                post("/api/v1/feel/evaluate")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content("{\"expression\": \"1 == 2\", \"context\": {}}"))
+            .andExpect(status().isOk())
+            .andReturn()
+            .getResponse()
+            .getContentAsString();
 
     assertThat(content).contains("\"error\":\"failed to parse expression");
   }
@@ -98,5 +102,4 @@ public final class FeelApiTest {
         .andExpect(status().isOk())
         .andExpect(content().json("{'result': true}"));
   }
-
 }

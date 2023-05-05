@@ -31,7 +31,8 @@ public final class FeelEvaluationService {
     }
   }
 
-  public Object evaluateUnaryTests(String expression, Object inputValue, Map<String, Object> context) {
+  public Object evaluateUnaryTests(
+      String expression, Object inputValue, Map<String, Object> context) {
     final var contextWithInput = new HashMap<>(context);
     contextWithInput.put("cellInput", inputValue); // FeelEngine.UnaryTests.defaultInputVariable()
 
@@ -45,5 +46,4 @@ public final class FeelEvaluationService {
       throw new RuntimeException(failure.message());
     }
   }
-
 }
