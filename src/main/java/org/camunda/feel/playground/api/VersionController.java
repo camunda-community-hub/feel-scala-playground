@@ -14,8 +14,8 @@ import org.springframework.web.bind.annotation.RestController;
 @CrossOrigin()
 public class VersionController {
 
-  private static final String feelEngineVersion = FeelEngine.class.getPackage()
-      .getImplementationVersion();
+  private static final String feelEngineVersion =
+      FeelEngine.class.getPackage().getImplementationVersion();
 
   @GetMapping
   public ResponseEntity<VersionResponse> getVersion() {

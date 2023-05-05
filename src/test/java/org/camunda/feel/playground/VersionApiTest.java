@@ -25,10 +25,8 @@ public final class VersionApiTest {
 
   @Test
   void shouldReturnVersion() throws Exception {
-    mvc.perform(
-            get("/api/v1/version"))
+    mvc.perform(get("/api/v1/version"))
         .andExpect(status().isOk())
         .andExpect(content().json("{'feelEngineVersion': '1.16.0'}"));
   }
-
 }

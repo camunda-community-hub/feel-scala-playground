@@ -50,8 +50,9 @@ public class FeelEvaluationController {
     LOG.debug("Evaluate FEEL unary-tests expression: {}", request);
 
     try {
-      final var result = evaluationService.evaluateUnaryTests(request.expression,
-          request.inputValue, request.context);
+      final var result =
+          evaluationService.evaluateUnaryTests(
+              request.expression, request.inputValue, request.context);
 
       return new ResponseEntity<>(FeelEvaluationResponse.withResult(result), HttpStatus.OK);
 
@@ -59,5 +60,4 @@ public class FeelEvaluationController {
       return new ResponseEntity<>(FeelEvaluationResponse.withError(e.getMessage()), HttpStatus.OK);
     }
   }
-
 }

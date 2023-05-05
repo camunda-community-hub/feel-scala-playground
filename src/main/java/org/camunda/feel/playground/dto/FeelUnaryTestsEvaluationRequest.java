@@ -43,11 +43,16 @@ public class FeelUnaryTestsEvaluationRequest {
 
   @Override
   public String toString() {
-    return "FeelUnaryTestsEvaluationRequest{" +
-        "expression='" + expression + '\'' +
-        ", inputValue=" + inputValue +
-        ", context=" + context +
-        ", metadata=" + metadata +
-        '}';
+    return "FeelUnaryTestsEvaluationRequest{"
+        + "expression='"
+        + expression
+        + '\''
+        + ", inputValue="
+        + inputValue
+        + ", context="
+        + context
+        + ", metadata="
+        + metadata
+        + '}';
   }
 }
