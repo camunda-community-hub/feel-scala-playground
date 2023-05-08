@@ -2,54 +2,80 @@
 ![Compatible with: Camunda Platform 8](https://img.shields.io/badge/Compatible%20with-Camunda%20Platform%208-0072Ce)
 [![](https://img.shields.io/badge/Lifecycle-Incubating-blue)](https://github.com/Camunda-Community-Hub/community/blob/main/extension-lifecycle.md#incubating-)
 
-# FEEL Tutorial Backend
+# FEEL-Scala Playground API
 
-This repository contains a Camunda 8 Java Spring Boot application that provides a Rest API backend
-for an interactive FEEL Tutorial.
+This repository contains the API for the FEEL-Scala Playground: https://camunda.github.io/feel-scala/docs/playground/
 
-The app is currently hosted here:
+## Usage
 
-http://feel.upgradingdave.com/swagger-ui/index.html#/process-controller/startProcessInstance
+The API has the following endpoints:
 
-# Compile and Build
+### Evaluate expression
 
-This is a Spring Boot App. Use `mvn clean install` or your IDE to build and compile.
+- Type: `POST`
+- Path: `/api/v1/feel/evaluate`
 
-Start the app by running the main method inside `ProcessApplication.java`.
+Request: 
 
-After starting the app, you should be able to access the swagger ui here:
-
-http://localhost:8080/swagger-ui/index.html#/process-controller/startProcessInstance
-
-# (Re) Create Docker Image
-
-In order to deploy to kubernetes, we first need to build a Docker image. The `buildx` commands below will build images
-compatible with both ARM and AMD processor architectures.
-
-```shell
-docker buildx create --use
-docker buildx build --platform linux/amd64,linux/arm64 --push -t upgradingdave/feel-tutorial:main .
-
-docker run -d -t -i -e ZEEBE_BASE_URL='zeebe.ultrawombat.com' \
--e ZEEBE_AUTH_URL='https://login.cloud.ultrawombat.com/oauth/token' \
--e ZEEBE_REGION=bru-2 \
--e ZEEBE_CLUSTER_ID='xxx' \
--e ZEEBE_CLIENT_ID='xxx' \
--e ZEEBE_CLIENT_SECRET='xxx' \
--p 8080:8080 \
---name feel-tutorial upgradingdave/feel-tutorial:main
+```json
+{
+  "expression": "x * y",
+  "context": {
+    "x": 2,
+    "y": 3
+  }
+}
 ```
 
-# Test in Docker Compose
+Response:
 
-To test running the docker image locally, update `docker-compose.feel-tutorial.yaml` with your cluster credentials. Then
-run:
-
-```shell
-docker-compose -f ./docker-compose.feel-tutorial.yml up -d --build
+```json
+{
+  "result": 6,
+  "error": null
+}
 ```
 
-# Deploy to Kubernetes Cluster
+### Evaluate unary-tests
+
+- Type: `POST`
+- Path: `/api/v1/feel-unary-tests/evaluate`
+
+Request: 
+
+```json
+{
+  "expression": "< x",
+  "inputValue": 3,
+  "context": {
+    "x": 5
+  }
+}
+```
+
+Response:
+
+```json
+{
+  "result": true,
+  "error": null
+}
+```
+
+### Version
+
+- Type: `GET`
+- Path: `/api/v1/version`
+
+Response:
+
+```json
+{
+  "feelEngineVersion": "1.16.0"
+}
+```
+
+## Install
 
 The following notes describe how to deploy to Google Cloud Kubernetes Cluster
 
@@ -59,15 +85,6 @@ First, do some setup (this should only be needed as a "one time" setup)
 cd k8s
 
 kubectl create namespace feel
-
-kubectl create secret generic feel-tutorial \
---from-literal=zeebe.client.cloud.base-url=zeebe.ultrawombat.com \
---from-literal=zeebe.client.cloud.auth-url=https://login.cloud.ultrawombat.com/oauth/token \
---from-literal=zeebe.client.cloud.region=bru-2 \
---from-literal=zeebe.client.cloud.clusterId=xxx \
---from-literal=zeebe.client.cloud.clientId=xxx \
---from-literal=zeebe.client.cloud.clientSecret=xxx \
---namespace feel
 
 kubectl apply -f service.yaml -n feel
 ```
@@ -81,20 +98,18 @@ kubectl apply -f deployment.yaml -n feel
 
 At this point, you should be able to port forward to the service. Run this:
 
-    kubectl port-forward svc/feel-tutorial-service 8080:8080 -n feel
-
-Then try accessing the service here: http://localhost:8080/swagger-ui/index.html#/process-controller/startProcessInstance
+    kubectl port-forward svc/feel-scala-playground-service 8080:8080 -n feel
 
 To setup load balancing, we need a static ip address. Here's the gcloud command to create an ip address.
 
 First, check if the ip address already exists:
 
-    gcloud compute addresses describe feel-tutorial-ip --global
+    gcloud compute addresses describe feel-scala-playground-ip --global
     # 34.111.164.116
 
 If needed, create a new static ip like so:
 
-    gcloud compute addresses create feel-tutorial-ip --global
+    gcloud compute addresses create feel-scala-playground-ip --global
 
 To setup ssl, first edit `managedCert.yaml` and update the domain names you'd like to use, then create a managed
 certificate object by running this:
@@ -111,14 +126,14 @@ for this feel-tutorial. Click on the Health Check and edit the path to be `/actu
 
 Check on status of ingress and ssl certificate:
 
-    kubectl describe ingress feel-tutorial-ingress -n feel
+    kubectl describe ingress feel-scala-playground-ingress -n feel
     kubectl describe managedcertificate feel-service-managed-cert -n feel
 
-# Clean up
+## Clean up
 
 To delete the pod (before redeploy):
 ```shell
-kubectl delete pod feel-tutorial-pod -n feel
+kubectl delete pod feel-scala-playground-pod -n feel
 ```
 
 To completely clear out all kubernetes objects related to feel:
