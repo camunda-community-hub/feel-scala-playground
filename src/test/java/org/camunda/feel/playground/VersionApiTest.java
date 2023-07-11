@@ -29,8 +29,8 @@ public final class VersionApiTest {
   void shouldReturnVersion() throws Exception {
     var expectedVersion = FeelEngine.class.getPackage().getImplementationVersion();
     assertThat(expectedVersion)
-            .describedAs("The version should match the pattern `x.y.z`")
-            .matches("(\\d+).(\\d+).(\\d+)");
+        .describedAs("The version should match the pattern `x.y.z`")
+        .matches("(\\d+).(\\d+).(\\d+)");
 
     mvc.perform(get("/api/v1/version"))
         .andExpect(status().isOk())
