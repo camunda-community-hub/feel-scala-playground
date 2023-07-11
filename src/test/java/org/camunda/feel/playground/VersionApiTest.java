@@ -7,10 +7,12 @@
  */
 package org.camunda.feel.playground;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import org.camunda.feel.FeelEngine;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -25,8 +27,13 @@ public final class VersionApiTest {
 
   @Test
   void shouldReturnVersion() throws Exception {
+    var expectedVersion = FeelEngine.class.getPackage().getImplementationVersion();
+    assertThat(expectedVersion)
+            .describedAs("The version should match the pattern `x.y.z`")
+            .matches("(\\d+).(\\d+).(\\d+)");
+
     mvc.perform(get("/api/v1/version"))
         .andExpect(status().isOk())
-        .andExpect(content().json("{'feelEngineVersion': '1.16.0'}"));
+        .andExpect(content().json("{'feelEngineVersion': '" + expectedVersion + "'}"));
   }
 }
