@@ -39,6 +39,12 @@
         <version>${feel.version}</version>
       </dependency>
 
+      <dependency>
+        <groupId>com.mixpanel</groupId>
+        <artifactId>mixpanel-java</artifactId>
+        <version>1.5.2</version>
+      </dependency>
+
     </dependencies>
   </dependencyManagement>
 
@@ -57,6 +63,11 @@
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-actuator</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>com.mixpanel</groupId>
+      <artifactId>mixpanel-java</artifactId>
     </dependency>
 
     <dependency>
