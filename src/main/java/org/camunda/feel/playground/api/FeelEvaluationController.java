@@ -25,9 +25,10 @@ public class FeelEvaluationController {
   private final FeelEvaluationService evaluationService;
   private final TrackingService trackingService;
 
-  public FeelEvaluationController(final FeelEvaluationService evaluationService, TrackingService trackingService) {
+  public FeelEvaluationController(
+      final FeelEvaluationService evaluationService, TrackingService trackingService) {
     this.evaluationService = evaluationService;
-      this.trackingService = trackingService;
+    this.trackingService = trackingService;
   }
 
   @PostMapping("/feel/evaluate")
@@ -45,7 +46,7 @@ public class FeelEvaluationController {
       return new ResponseEntity<>(FeelEvaluationResponse.withError(e.getMessage()), HttpStatus.OK);
 
     } finally {
-        trackingService.trackExpressionEvaluation(request.metadata);
+      trackingService.trackExpressionEvaluation(request.metadata);
     }
   }
 
@@ -66,7 +67,7 @@ public class FeelEvaluationController {
       return new ResponseEntity<>(FeelEvaluationResponse.withError(e.getMessage()), HttpStatus.OK);
 
     } finally {
-        trackingService.trackUnaryTestsExpressionEvaluation(request.metadata);
+      trackingService.trackUnaryTestsExpressionEvaluation(request.metadata);
     }
   }
 }

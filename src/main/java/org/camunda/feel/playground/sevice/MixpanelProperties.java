@@ -8,10 +8,10 @@ import org.springframework.context.annotation.Configuration;
 @ConditionalOnProperty(prefix = "playground.tracking", name = "enabled", havingValue = "true")
 public class MixpanelProperties {
 
-    @Value("${MIXPANEL_PROJECT_TOKEN}")
-    private String projectToken;
+  @Value("${MIXPANEL_PROJECT_TOKEN}")
+  private String projectToken;
 
-    public String getProjectToken() {
-        return projectToken;
-    }
+  public String getProjectToken() {
+    return projectToken;
+  }
 }
