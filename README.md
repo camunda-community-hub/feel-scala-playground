@@ -15,7 +15,7 @@ The API has the following endpoints:
 - Type: `POST`
 - Path: `/api/v1/feel/evaluate`
 
-Request: 
+Request:
 
 ```json
 {
@@ -41,7 +41,7 @@ Response:
 - Type: `POST`
 - Path: `/api/v1/feel-unary-tests/evaluate`
 
-Request: 
+Request:
 
 ```json
 {
@@ -87,6 +87,12 @@ cd k8s
 kubectl create namespace feel
 
 kubectl apply -f service.yaml -n feel
+```
+
+To deploy the secrets, edit `secret.yaml` and set `mixpanel_project_token` to your Mixpanel project token. Then run the following:
+
+```shell
+kubectl apply -f secret.yaml -n feel
 ```
 
 To deploy the rest api, edit `deployment.yaml` and set `spec.template.spec.containers[0].img` to point

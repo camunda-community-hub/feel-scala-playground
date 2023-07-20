@@ -4,6 +4,7 @@ import org.camunda.feel.playground.dto.FeelEvaluationRequest;
 import org.camunda.feel.playground.dto.FeelEvaluationResponse;
 import org.camunda.feel.playground.dto.FeelUnaryTestsEvaluationRequest;
 import org.camunda.feel.playground.sevice.FeelEvaluationService;
+import org.camunda.feel.playground.sevice.TrackingService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -22,9 +23,11 @@ public class FeelEvaluationController {
   private static final Logger LOG = LoggerFactory.getLogger(FeelEvaluationController.class);
 
   private final FeelEvaluationService evaluationService;
+  private final TrackingService trackingService;
 
-  public FeelEvaluationController(final FeelEvaluationService evaluationService) {
+  public FeelEvaluationController(final FeelEvaluationService evaluationService, TrackingService trackingService) {
     this.evaluationService = evaluationService;
+      this.trackingService = trackingService;
   }
 
   @PostMapping("/feel/evaluate")
@@ -40,6 +43,9 @@ public class FeelEvaluationController {
 
     } catch (Exception e) {
       return new ResponseEntity<>(FeelEvaluationResponse.withError(e.getMessage()), HttpStatus.OK);
+
+    } finally {
+        trackingService.trackExpressionEvaluation(request.metadata);
     }
   }
 
@@ -58,6 +64,9 @@ public class FeelEvaluationController {
 
     } catch (Exception e) {
       return new ResponseEntity<>(FeelEvaluationResponse.withError(e.getMessage()), HttpStatus.OK);
+
+    } finally {
+        trackingService.trackUnaryTestsExpressionEvaluation(request.metadata);
     }
   }
 }
