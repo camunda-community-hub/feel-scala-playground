@@ -21,3 +21,9 @@ spec:
               port: 8080
             initialDelaySeconds: 10
             timeoutSeconds: 5
+          env:
+            - name: MIXPANEL_PROJECT_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: feel-scala-playground-secret
+                  key: mixpanel_project_token
