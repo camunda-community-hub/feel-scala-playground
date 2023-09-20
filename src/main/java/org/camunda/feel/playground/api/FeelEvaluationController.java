@@ -1,7 +1,9 @@
 package org.camunda.feel.playground.api;
 
+import org.camunda.feel.api.EvaluationResult;
 import org.camunda.feel.playground.dto.FeelEvaluationRequest;
 import org.camunda.feel.playground.dto.FeelEvaluationResponse;
+import org.camunda.feel.playground.dto.FeelEvaluationWarning;
 import org.camunda.feel.playground.dto.FeelUnaryTestsEvaluationRequest;
 import org.camunda.feel.playground.sevice.FeelEvaluationService;
 import org.camunda.feel.playground.sevice.TrackingService;
@@ -14,6 +16,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1")
@@ -39,8 +44,7 @@ public class FeelEvaluationController {
 
     try {
       final var result = evaluationService.evaluate(request.expression, request.context);
-
-      return new ResponseEntity<>(FeelEvaluationResponse.withResult(result), HttpStatus.OK);
+      return createEvaluationResponse(result);
 
     } catch (Exception e) {
       return new ResponseEntity<>(FeelEvaluationResponse.withError(e.getMessage()), HttpStatus.OK);
@@ -48,6 +52,38 @@ public class FeelEvaluationController {
     } finally {
       trackingService.trackExpressionEvaluation(request.metadata);
     }
+  }
+
+  private static ResponseEntity<FeelEvaluationResponse> createEvaluationResponse(
+      EvaluationResult result) {
+    final var warnings = collectEvaluationWarnings(result);
+
+    if (result.isSuccess()) {
+      final var response = FeelEvaluationResponse.withResult(result.result());
+      response.setWarnings(warnings);
+      return new ResponseEntity<>(response, HttpStatus.OK);
+
+    } else {
+      final var failureMessage = result.failure().message();
+      final var response = FeelEvaluationResponse.withError(failureMessage);
+      response.setWarnings(warnings);
+      return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+  }
+
+  private static List<FeelEvaluationWarning> collectEvaluationWarnings(EvaluationResult result) {
+    final var warnings = new ArrayList<FeelEvaluationWarning>();
+    result
+        .suppressedFailures()
+        .foreach(
+            failure -> {
+              final var warning =
+                  FeelEvaluationWarning.of(
+                      failure.failureType().toString(), failure.failureMessage());
+              warnings.add(warning);
+              return null;
+            });
+    return warnings;
   }
 
   @PostMapping("/feel-unary-tests/evaluate")
@@ -61,7 +97,7 @@ public class FeelEvaluationController {
           evaluationService.evaluateUnaryTests(
               request.expression, request.inputValue, request.context);
 
-      return new ResponseEntity<>(FeelEvaluationResponse.withResult(result), HttpStatus.OK);
+      return createEvaluationResponse(result);
 
     } catch (Exception e) {
       return new ResponseEntity<>(FeelEvaluationResponse.withError(e.getMessage()), HttpStatus.OK);

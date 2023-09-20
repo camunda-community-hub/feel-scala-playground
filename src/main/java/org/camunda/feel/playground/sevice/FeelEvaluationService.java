@@ -7,43 +7,30 @@
  */
 package org.camunda.feel.playground.sevice;
 
-import java.util.HashMap;
 import java.util.Map;
 import org.camunda.feel.FeelEngine;
+import org.camunda.feel.api.EvaluationResult;
+import org.camunda.feel.api.FeelEngineApi;
 import org.camunda.feel.impl.JavaValueMapper;
 import org.springframework.stereotype.Component;
 
 @Component
 public final class FeelEvaluationService {
 
-  private final FeelEngine feelEngine =
-      new FeelEngine.Builder().customValueMapper(new JavaValueMapper()).build();
+  private final FeelEngineApi feelEngineApi = buildFeelEngine();
 
-  public Object evaluate(String expression, Map<String, Object> context) {
-    final var evaluationResult = feelEngine.evalExpression(expression, context);
-
-    if (evaluationResult.isRight()) {
-      return evaluationResult.right().get();
-
-    } else {
-      final var failure = evaluationResult.left().get();
-      throw new RuntimeException(failure.message());
-    }
+  private FeelEngineApi buildFeelEngine() {
+    final var feelEngine =
+        new FeelEngine.Builder().customValueMapper(new JavaValueMapper()).build();
+    return new FeelEngineApi(feelEngine);
   }
 
-  public Object evaluateUnaryTests(
+  public EvaluationResult evaluate(String expression, Map<String, Object> context) {
+    return feelEngineApi.evaluateExpression(expression, context);
+  }
+
+  public EvaluationResult evaluateUnaryTests(
       String expression, Object inputValue, Map<String, Object> context) {
-    final var contextWithInput = new HashMap<>(context);
-    contextWithInput.put("cellInput", inputValue); // FeelEngine.UnaryTests.defaultInputVariable()
-
-    final var evaluationResult = feelEngine.evalUnaryTests(expression, contextWithInput);
-
-    if (evaluationResult.isRight()) {
-      return evaluationResult.right().get();
-
-    } else {
-      final var failure = evaluationResult.left().get();
-      throw new RuntimeException(failure.message());
-    }
+    return feelEngineApi.evaluateUnaryTests(expression, inputValue, context);
   }
 }

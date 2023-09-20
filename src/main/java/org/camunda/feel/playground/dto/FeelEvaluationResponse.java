@@ -7,10 +7,14 @@
  */
 package org.camunda.feel.playground.dto;
 
+import java.util.List;
+
 public final class FeelEvaluationResponse {
 
   public Object result;
   public String error;
+
+  public List<FeelEvaluationWarning> warnings;
 
   public Object getResult() {
     return result;
@@ -26,6 +30,14 @@ public final class FeelEvaluationResponse {
 
   public void setError(final String error) {
     this.error = error;
+  }
+
+  public List<FeelEvaluationWarning> getWarnings() {
+    return warnings;
+  }
+
+  public void setWarnings(List<FeelEvaluationWarning> warnings) {
+    this.warnings = warnings;
   }
 
   public static FeelEvaluationResponse withResult(Object result) {

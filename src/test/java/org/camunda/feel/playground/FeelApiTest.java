@@ -65,17 +65,30 @@ public final class FeelApiTest {
         .andExpect(content().json("{'result': {'x': 1}}"));
   }
 
-  @Test
+    @Test
+    void shouldReturnEvaluationWarnings() throws Exception {
+        mvc.perform(
+                        post("/api/v1/feel/evaluate")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content("{\"expression\": \"x\", \"context\": {}}"))
+                .andExpect(status().isOk())
+                .andExpect(content().json(
+                        "{'result': null, 'warnings': [{'type': \"NO_VARIABLE_FOUND\", 'message': \"No variable found with name 'x'\"}]}"
+                ));
+    }
+
+
+    @Test
   void shouldReturnEvaluationFailure() throws Exception {
     mvc.perform(
             post("/api/v1/feel/evaluate")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content("{\"expression\": \"x\", \"context\": {}}"))
+                .content("{\"expression\": \"assert(x, x != null)\", \"context\": {}}"))
         .andExpect(status().isOk())
         .andExpect(
             content()
                 .json(
-                    "{'error': \"failed to evaluate expression 'x': no variable found for name 'x'\"}"));
+                    "{'error': \"Assertion failure on evaluate the expression 'assert(x, x != null)': The condition is not fulfilled\"}"));
   }
 
   @Test
