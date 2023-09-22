@@ -32,7 +32,8 @@ Response:
 ```json
 {
   "result": 6,
-  "error": null
+  "error": null,
+  "warnings": []
 }
 ```
 
@@ -58,7 +59,8 @@ Response:
 ```json
 {
   "result": true,
-  "error": null
+  "error": null,
+  "warnings": []
 }
 ```
 
