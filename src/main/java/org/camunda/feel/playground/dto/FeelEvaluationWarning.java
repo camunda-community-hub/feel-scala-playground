@@ -22,10 +22,10 @@ public final class FeelEvaluationWarning {
   }
 
   public static FeelEvaluationWarning of(String type, String message) {
-      final var warning = new FeelEvaluationWarning();
-      warning.type = type;
-      warning.message = message;
-      return warning;
+    final var warning = new FeelEvaluationWarning();
+    warning.type = type;
+    warning.message = message;
+    return warning;
   }
 
   @Override

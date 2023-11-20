@@ -65,20 +65,20 @@ public final class FeelApiTest {
         .andExpect(content().json("{'result': {'x': 1}}"));
   }
 
-    @Test
-    void shouldReturnEvaluationWarnings() throws Exception {
-        mvc.perform(
-                        post("/api/v1/feel/evaluate")
-                                .contentType(MediaType.APPLICATION_JSON)
-                                .content("{\"expression\": \"x\", \"context\": {}}"))
-                .andExpect(status().isOk())
-                .andExpect(content().json(
-                        "{'result': null, 'warnings': [{'type': \"NO_VARIABLE_FOUND\", 'message': \"No variable found with name 'x'\"}]}"
-                ));
-    }
+  @Test
+  void shouldReturnEvaluationWarnings() throws Exception {
+    mvc.perform(
+            post("/api/v1/feel/evaluate")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("{\"expression\": \"x\", \"context\": {}}"))
+        .andExpect(status().isOk())
+        .andExpect(
+            content()
+                .json(
+                    "{'result': null, 'warnings': [{'type': \"NO_VARIABLE_FOUND\", 'message': \"No variable found with name 'x'\"}]}"));
+  }
 
-
-    @Test
+  @Test
   void shouldReturnEvaluationFailure() throws Exception {
     mvc.perform(
             post("/api/v1/feel/evaluate")
