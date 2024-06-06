@@ -9,7 +9,7 @@ This repository contains the API for the FEEL-Scala Playground: https://camunda.
 ```bash
 curl --header "Content-Type: application/json" \
 -X POST \
--d '{"expression":"x + y", "context":{"x": 2, "y": 3}, "metadata": {"source": "camunda-academy", "page": "test"}}' \
+-d '{"expression":"x + y", "context":{"x": 2, "y": 3}, "metadata": {"source": "test"}}' \
 API_URL/api/v1/feel/evaluate  
 ```
 
