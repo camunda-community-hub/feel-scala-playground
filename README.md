@@ -1,10 +1,17 @@
 [![Community Extension](https://img.shields.io/badge/Community%20Extension-An%20open%20source%20community%20maintained%20project-FF4700)](https://github.com/camunda-community-hub/community)
 ![Compatible with: Camunda Platform 8](https://img.shields.io/badge/Compatible%20with-Camunda%20Platform%208-0072Ce)
-[![](https://img.shields.io/badge/Lifecycle-Incubating-blue)](https://github.com/Camunda-Community-Hub/community/blob/main/extension-lifecycle.md#incubating-)
+[![](https://img.shields.io/badge/Lifecycle-Stable-brightgreen)](https://github.com/Camunda-Community-Hub/community/blob/main/extension-lifecycle.md#stable-)
 
 # FEEL-Scala Playground API
 
 This repository contains the API for the FEEL-Scala Playground: https://camunda.github.io/feel-scala/docs/playground/
+
+```bash
+curl --header "Content-Type: application/json" \
+-X POST \
+-d '{"expression":"x + y", "context":{"x": 2, "y": 3}, "metadata": {"source": "camunda-academy", "page": "test"}}' \
+API_URL/api/v1/feel/evaluate  
+```
 
 ## Usage
 
@@ -14,6 +21,10 @@ The API has the following endpoints:
 
 - Type: `POST`
 - Path: `/api/v1/feel/evaluate`
+- Properties:
+  - `expression` - (String) required
+  - `context` - (JSON object) required
+  - `metadata` - (JSON object) optional - used for tracking purposes 
 
 Request:
 
@@ -23,6 +34,9 @@ Request:
   "context": {
     "x": 2,
     "y": 3
+  },
+  "metadata": {
+    "source": "test"
   }
 }
 ```
@@ -41,7 +55,12 @@ Response:
 
 - Type: `POST`
 - Path: `/api/v1/feel-unary-tests/evaluate`
-
+- Properties:
+  - `expression` - (String) required
+  - `inputValue` - (JSON value) required
+  - `context` - (JSON object) required
+  - `metadata` - (JSON object) optional - used for tracking purposes
+ 
 Request:
 
 ```json
@@ -50,6 +69,9 @@ Request:
   "inputValue": 3,
   "context": {
     "x": 5
+  },
+  "metadata": {
+    "source": "test"
   }
 }
 ```
