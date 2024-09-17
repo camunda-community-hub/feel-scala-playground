@@ -37,11 +37,11 @@ jobs:
       with:
         release-version: ${{ github.event.release.tag_name }}
         release-profile: community-action-maven-release
-        maven-url: s01.oss.sonatype.org
+        maven-url: oss.sonatype.org
         nexus-usr: ${{ secrets.NEXUS_USR }}
         nexus-psw: ${{ secrets.NEXUS_PSW }}
-        maven-usr: ${{ secrets.COMMUNITY_HUB_MAVEN_CENTRAL_S01_USR }}
-        maven-psw: ${{ secrets.COMMUNITY_HUB_MAVEN_CENTRAL_S01_PSW }}
+        maven-usr: ${{ secrets.COMMUNITY_HUB_MAVEN_CENTRAL_OSS_USR  }}
+        maven-psw: ${{ secrets.COMMUNITY_HUB_MAVEN_CENTRAL_OSS_PSW }}
         maven-gpg-passphrase: ${{ secrets.MAVEN_CENTRAL_GPG_SIGNING_KEY_PASSPHRASE }}
         github-token: ${{ secrets.GITHUB_TOKEN }}
       id: release
