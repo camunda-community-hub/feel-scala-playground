@@ -10,7 +10,6 @@ package org.camunda.feel.playground.sevice;
 import java.util.Map;
 import java.util.Optional;
 import java.util.function.Function;
-
 import org.camunda.feel.FeelEngine;
 import org.camunda.feel.api.EvaluationResult;
 import org.camunda.feel.api.FeelEngineApi;
