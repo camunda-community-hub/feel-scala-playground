@@ -13,6 +13,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -35,34 +38,33 @@ public final class FeelApiTest {
         .andExpect(content().json("{'result': 3}"));
   }
 
-  @Test
-  void shouldReturnNull() throws Exception {
+  @CsvSource(
+      value = {
+        "3;3",
+        "\\\"feel\\\";\"feel\"",
+        "true;true",
+        "null;null",
+        "[1,2,3];[1,2,3]",
+        "{x:1};{'x': 1}",
+        "[{x:1}];[{'x': 1}]",
+        "{x:[1,2]};{'x': [1,2]}",
+        "@\\\"2025-01-20\\\";\"2025-01-20\"",
+        "@\\\"10:41:30\\\";\"10:41:30\"",
+        "@\\\"10:41:30+02:00\\\";\"10:41:30+02:00\"",
+        "@\\\"2025-01-20T10:41:30\\\";\"2025-01-20T10:41:30\"",
+        "@\\\"2025-01-20T10:41:30+02:00\\\";\"2025-01-20T10:41:30+02:00\"",
+        "@\\\"P5D\\\";\"P5D\"",
+        "@\\\"P2Y\\\";\"P2Y\""
+      },
+      delimiter = ';')
+  @ParameterizedTest
+  void shouldReturnResultValue(final String expression, final String expected) throws Exception {
     mvc.perform(
             post("/api/v1/feel/evaluate")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content("{\"expression\": \"null\", \"context\": {}}"))
+                .content("{\"expression\": \"" + expression + "\", \"context\": {}}"))
         .andExpect(status().isOk())
-        .andExpect(content().json("{'result': null}"));
-  }
-
-  @Test
-  void shouldReturnList() throws Exception {
-    mvc.perform(
-            post("/api/v1/feel/evaluate")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content("{\"expression\": \"[1,2,3]\", \"context\": {}}"))
-        .andExpect(status().isOk())
-        .andExpect(content().json("{'result': [1,2,3]}"));
-  }
-
-  @Test
-  void shouldReturnContext() throws Exception {
-    mvc.perform(
-            post("/api/v1/feel/evaluate")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content("{\"expression\": \"{x:1}\", \"context\": {}}"))
-        .andExpect(status().isOk())
-        .andExpect(content().json("{'result': {'x': 1}}"));
+        .andExpect(content().json("{'result': " + expected + "}"));
   }
 
   @Test
