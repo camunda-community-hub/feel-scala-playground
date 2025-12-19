@@ -19,7 +19,7 @@
     <!-- release parent settings -->
     <version.java>17</version.java>
     <feel.version>1.20.0</feel.version>
-    <spring.boot.version>3.5.7</spring.boot.version>
+    <spring.boot.version>4.0.1</spring.boot.version>
   </properties>
 
   <dependencyManagement>
