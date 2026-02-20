@@ -18,7 +18,7 @@
   <properties>
     <!-- release parent settings -->
     <version.java>17</version.java>
-    <feel.version>1.20.1</feel.version>
+    <feel.version>1.20.2</feel.version>
     <spring.boot.version>3.5.11</spring.boot.version>
   </properties>
 
