@@ -9,8 +9,11 @@ const resultField = document.getElementById("result");
 const warningsField = document.getElementById("warnings");
 const serverStatusField = document.getElementById("server-status");
 const feelVersionField = document.getElementById("feel-version");
+const evaluationTimeField = document.getElementById("evaluation-time");
 const form = document.getElementById("playground-form");
 const copyLinkButton = document.getElementById("copy-link");
+const copyResultButton = document.getElementById("copy-result");
+const copyWarningsButton = document.getElementById("copy-warnings");
 const importLinkField = document.getElementById("import-link");
 const importLinkButton = document.getElementById("import-link-button");
 const importPanel = document.getElementById("import-panel");
@@ -106,6 +109,7 @@ function parseJson(text, fallback) {
 function clearOutput() {
   resultField.textContent = "";
   warningsField.textContent = "";
+  evaluationTimeField.textContent = "—";
 }
 
 function formatWarnings(warnings) {
@@ -220,6 +224,7 @@ function readForm() {
 }
 
 async function evaluateCurrent() {
+  const startTime = performance.now();
   try {
     const { expressionType, payload } = readForm();
     const path =
@@ -242,6 +247,8 @@ async function evaluateCurrent() {
   } catch (error) {
     setOutput(error.message, [], true);
   } finally {
+    const elapsedMs = Math.round((performance.now() - startTime) * 10) / 10;
+    evaluationTimeField.textContent = `${elapsedMs} ms`;
     refreshHighlights();
   }
 }
@@ -275,6 +282,26 @@ async function copyLink() {
   } catch (error) {
     window.prompt("Copy this link", link);
   }
+}
+
+async function copyText(text, button, defaultLabel, copiedLabel) {
+  try {
+    await navigator.clipboard.writeText(text);
+    button.textContent = copiedLabel;
+    setTimeout(() => {
+      button.textContent = defaultLabel;
+    }, 1200);
+  } catch (error) {
+    window.prompt("Copy this text", text);
+  }
+}
+
+async function copyResult() {
+  await copyText(resultField.textContent, copyResultButton, "Copy Result", "Copied");
+}
+
+async function copyWarnings() {
+  await copyText(warningsField.textContent, copyWarningsButton, "Copy Warnings", "Copied");
 }
 
 function applyQueryParameters(params) {
@@ -348,6 +375,8 @@ contextField.addEventListener("scroll", () => {
 inputValueField.addEventListener("input", captureCurrentMode);
 form.addEventListener("submit", evaluate);
 copyLinkButton.addEventListener("click", copyLink);
+copyResultButton.addEventListener("click", copyResult);
+copyWarningsButton.addEventListener("click", copyWarnings);
 importLinkButton.addEventListener("click", importLink);
 formatContextButton.addEventListener("click", () => {
   try {

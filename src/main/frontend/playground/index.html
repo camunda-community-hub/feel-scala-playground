@@ -11,16 +11,15 @@
     <header class="brand-header py-3 mb-4">
       <div class="container">
         <h1 class="h3 mb-0">FEEL-Scala Playground</h1>
+        <p class="metadata-line mb-0 mt-2">
+          Status: <strong id="server-status">Loading...</strong> · FEEL version:
+          <strong id="feel-version">Loading...</strong> · Evaluation time:
+          <strong id="evaluation-time">—</strong>
+        </p>
       </div>
     </header>
 
     <main class="container pb-4">
-
-      <p class="status-line">
-        Status: <strong id="server-status">Loading...</strong> · FEEL version:
-        <strong id="feel-version">Loading...</strong>
-      </p>
-
       <form id="playground-form">
         <div class="mb-3">
           <label for="expression-type" class="form-label">Expression Type</label>
@@ -74,10 +73,18 @@
 
       <hr />
 
-      <h2>Result</h2>
+      <div class="section-title">
+        <h2>Result</h2>
+        <button type="button" id="copy-result" class="btn btn-secondary btn-small">Copy Result</button>
+      </div>
       <pre class="result-block"><code id="result"></code></pre>
 
-      <h2>Warnings</h2>
+      <div class="section-title">
+        <h2>Warnings</h2>
+        <button type="button" id="copy-warnings" class="btn btn-secondary btn-small">
+          Copy Warnings
+        </button>
+      </div>
       <pre id="warnings" class="result-block"></pre>
     </main>
 

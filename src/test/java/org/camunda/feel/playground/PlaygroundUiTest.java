@@ -35,9 +35,12 @@ public final class PlaygroundUiTest {
 
     assertThat(content).contains("FEEL-Scala Playground");
     assertThat(content).contains("Copy Share Link");
+    assertThat(content).contains("Copy Result");
+    assertThat(content).contains("Copy Warnings");
     assertThat(content).contains("Import Share Link");
     assertThat(content).contains("Format JSON");
     assertThat(content).contains("expression-type");
+    assertThat(content).contains("evaluation-time");
     assertThat(content).contains("import-panel");
     assertThat(content).contains("expression-highlight");
     assertThat(content).contains("context-highlight");
