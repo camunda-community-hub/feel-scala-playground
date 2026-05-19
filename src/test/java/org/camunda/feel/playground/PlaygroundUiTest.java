@@ -33,7 +33,7 @@ public final class PlaygroundUiTest {
             .getResponse()
             .getContentAsString();
 
-    assertThat(content).contains("FEEL Playground");
+    assertThat(content).contains("FEEL-Scala Playground");
     assertThat(content).contains("Copy Share Link");
     assertThat(content).contains("Import Share Link");
     assertThat(content).contains("Format JSON");
@@ -43,6 +43,7 @@ public final class PlaygroundUiTest {
     assertThat(content).contains("context-highlight");
     assertThat(content).contains("/playground/app.js");
     assertThat(content).contains("/playground/styles.css");
+    assertThat(content).contains("/webjars/bootstrap/5.3.8/css/bootstrap.min.css");
     assertThat(content).doesNotContain("cdn.jsdelivr.net");
   }
 
@@ -50,5 +51,6 @@ public final class PlaygroundUiTest {
   void shouldServePlaygroundAssets() throws Exception {
     mvc.perform(get("/playground/app.js")).andExpect(status().isOk());
     mvc.perform(get("/playground/styles.css")).andExpect(status().isOk());
+    mvc.perform(get("/webjars/bootstrap/5.3.8/css/bootstrap.min.css")).andExpect(status().isOk());
   }
 }

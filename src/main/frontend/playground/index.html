@@ -3,17 +3,18 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>FEEL Playground</title>
+    <title>FEEL-Scala Playground</title>
+    <link rel="stylesheet" href="/webjars/bootstrap/5.3.8/css/bootstrap.min.css" />
     <link rel="stylesheet" href="/playground/styles.css" />
   </head>
   <body>
-    <header class="brand-header">
+    <header class="brand-header py-3 mb-4">
       <div class="container">
-        <h1>Camunda FEEL Playground</h1>
+        <h1 class="h3 mb-0">FEEL-Scala Playground</h1>
       </div>
     </header>
 
-    <main class="container">
+    <main class="container pb-4">
 
       <p class="status-line">
         Status: <strong id="server-status">Loading...</strong> · FEEL version:
@@ -21,30 +22,30 @@
       </p>
 
       <form id="playground-form">
-        <div class="form-group">
-          <label for="expression-type">Expression Type</label>
-          <select id="expression-type" class="field-select">
+        <div class="mb-3">
+          <label for="expression-type" class="form-label">Expression Type</label>
+          <select id="expression-type" class="form-select">
             <option value="expression">Expression</option>
             <option value="unary-tests">Unary-tests</option>
           </select>
         </div>
 
-        <div class="form-group">
-          <label for="expression">Expression</label>
+        <div class="mb-3">
+          <label for="expression" class="form-label">Expression</label>
           <div class="code-editor">
             <pre id="expression-highlight" class="editor-highlight" aria-hidden="true"></pre>
             <textarea id="expression" class="editor-input" rows="4"></textarea>
           </div>
         </div>
 
-        <div class="form-group" id="input-value-group">
-          <label for="input-value">Input value (JSON)</label>
-          <textarea id="input-value" class="field-textarea" rows="3">5</textarea>
+        <div class="mb-3" id="input-value-group">
+          <label for="input-value" class="form-label">Input value (JSON)</label>
+          <textarea id="input-value" class="form-control" rows="3">5</textarea>
         </div>
 
-        <div class="form-group">
+        <div class="mb-3">
           <div class="split-line">
-            <label for="context">Variables / Context (JSON object)</label>
+            <label for="context" class="form-label mb-0">Variables / Context (JSON object)</label>
             <button type="button" id="format-context" class="btn btn-secondary btn-small">
               Format JSON
             </button>
@@ -55,7 +56,7 @@
           </div>
         </div>
 
-        <div class="button-row">
+        <div class="button-row d-flex gap-2 flex-wrap">
           <button type="submit" class="btn btn-primary">Evaluate</button>
           <button type="button" id="copy-link" class="btn btn-secondary">
             Copy Share Link
@@ -64,9 +65,9 @@
       </form>
 
       <details class="import-panel" id="import-panel">
-        <summary>Import Share Link</summary>
+        <summary class="fw-semibold">Import Share Link</summary>
         <div class="import-row">
-          <input id="import-link" class="field-input" placeholder="Paste FEEL playground URL" />
+          <input id="import-link" class="form-control" placeholder="Paste FEEL playground URL" />
           <button type="button" id="import-link-button" class="btn btn-secondary">Import</button>
         </div>
       </details>

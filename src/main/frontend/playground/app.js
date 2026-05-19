@@ -180,6 +180,7 @@ function applyMode(mode) {
 function switchMode(mode) {
   captureCurrentMode();
   applyMode(mode);
+  clearOutput();
 }
 
 function refreshHighlights() {

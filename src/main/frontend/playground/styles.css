@@ -3,42 +3,23 @@
 }
 
 body {
-  margin: 0;
   background: #f4f8fb;
   color: #0f1f35;
-  font-family: Inter, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+
+.form-control,
+.form-select,
+.btn {
+  border-radius: 0.4rem;
 }
 
 .brand-header {
   background: #ec5e00;
   color: #fff;
-  padding: 1rem 0;
-  margin-bottom: 1.5rem;
-}
-
-.brand-header h1 {
-  margin: 0;
-  font-size: 1.4rem;
-  font-weight: 700;
-}
-
-.container {
-  width: min(900px, calc(100% - 2rem));
-  margin: 0 auto;
 }
 
 .status-line {
   margin: 0 0 1rem;
-}
-
-.form-group {
-  margin-bottom: 1rem;
-}
-
-label {
-  display: inline-block;
-  margin-bottom: 0.35rem;
-  font-weight: 600;
 }
 
 .split-line {
@@ -48,21 +29,8 @@ label {
   gap: 1rem;
 }
 
-.field-select,
-.field-textarea,
-.field-input,
 .editor-input {
   width: 100%;
-  border: 1px solid #cdd8e5;
-  border-radius: 0.4rem;
-  padding: 0.55rem 0.7rem;
-  font: inherit;
-  background: #fff;
-  color: #0f1f35;
-}
-
-.field-textarea {
-  min-height: 3.3rem;
 }
 
 .code-editor {
@@ -120,38 +88,29 @@ label {
   margin-top: 0.35rem;
 }
 
-.btn {
-  border: 1px solid transparent;
-  border-radius: 0.4rem;
-  padding: 0.5rem 0.8rem;
-  font: inherit;
-  font-weight: 600;
-  cursor: pointer;
-}
-
 .btn-small {
-  padding: 0.28rem 0.55rem;
+  padding: 0.2rem 0.5rem;
   font-size: 0.85rem;
 }
 
 .btn-primary {
   background: #0f1f35;
   border-color: #0f1f35;
-  color: #fff;
 }
 
 .btn-primary:hover {
   background: #163153;
+  border-color: #163153;
 }
 
 .btn-secondary {
-  background: #fff;
   border-color: #9fb1c6;
-  color: #0f1f35;
 }
 
 .btn-secondary:hover {
   background: #edf2f8;
+  border-color: #9fb1c6;
+  color: #0f1f35;
 }
 
 .import-panel {
@@ -164,7 +123,6 @@ label {
 .import-panel summary {
   padding: 0.55rem 0.75rem;
   cursor: pointer;
-  font-weight: 600;
 }
 
 .import-panel[open] .import-row {
