@@ -27,7 +27,6 @@ import org.camunda.feel.syntaxtree.*;
 import org.camunda.feel.valuemapper.CustomValueMapper;
 import org.camunda.feel.valuemapper.JavaCustomValueMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -38,9 +37,8 @@ public final class FeelEvaluationService implements AutoCloseable {
   private final ExecutorService executorService;
 
   @Autowired
-  public FeelEvaluationService(
-      @Value("${playground.feel.evaluation.timeout:10s}") Duration evaluationTimeout) {
-    this(buildFeelEngine(), evaluationTimeout);
+  public FeelEvaluationService(FeelEvaluationProperties feelEvaluationProperties) {
+    this(buildFeelEngine(), feelEvaluationProperties.getTimeout());
   }
 
   FeelEvaluationService(FeelEngineApi feelEngineApi, Duration evaluationTimeout) {
