@@ -18,8 +18,16 @@ body {
   color: #fff;
 }
 
+.header-row {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
 .metadata-line {
-  font-size: 0.95rem;
+  font-size: 0.82rem;
   opacity: 0.95;
 }
 
@@ -184,4 +192,9 @@ hr {
 
 .token-operator {
   color: #334155;
+}
+
+.evaluation-line {
+  margin: 0.5rem 0 0;
+  font-size: 0.9rem;
 }

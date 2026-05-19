@@ -13,7 +13,6 @@ const evaluationTimeField = document.getElementById("evaluation-time");
 const form = document.getElementById("playground-form");
 const copyLinkButton = document.getElementById("copy-link");
 const copyResultButton = document.getElementById("copy-result");
-const copyWarningsButton = document.getElementById("copy-warnings");
 const importLinkField = document.getElementById("import-link");
 const importLinkButton = document.getElementById("import-link-button");
 const importPanel = document.getElementById("import-panel");
@@ -300,9 +299,6 @@ async function copyResult() {
   await copyText(resultField.textContent, copyResultButton, "Copy Result", "Copied");
 }
 
-async function copyWarnings() {
-  await copyText(warningsField.textContent, copyWarningsButton, "Copy Warnings", "Copied");
-}
 
 function applyQueryParameters(params) {
   const expressionType = params.get("expression-type");
@@ -376,7 +372,6 @@ inputValueField.addEventListener("input", captureCurrentMode);
 form.addEventListener("submit", evaluate);
 copyLinkButton.addEventListener("click", copyLink);
 copyResultButton.addEventListener("click", copyResult);
-copyWarningsButton.addEventListener("click", copyWarnings);
 importLinkButton.addEventListener("click", importLink);
 formatContextButton.addEventListener("click", () => {
   try {

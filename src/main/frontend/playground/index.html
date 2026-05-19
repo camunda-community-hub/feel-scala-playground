@@ -10,12 +10,13 @@
   <body>
     <header class="brand-header py-3 mb-4">
       <div class="container">
-        <h1 class="h3 mb-0">FEEL-Scala Playground</h1>
-        <p class="metadata-line mb-0 mt-2">
-          Status: <strong id="server-status">Loading...</strong> · FEEL version:
-          <strong id="feel-version">Loading...</strong> · Evaluation time:
-          <strong id="evaluation-time">—</strong>
-        </p>
+        <div class="header-row">
+          <h1 class="h3 mb-0">FEEL-Scala Playground</h1>
+          <p class="metadata-line mb-0">
+            Status: <strong id="server-status">Loading...</strong> · FEEL version:
+            <strong id="feel-version">Loading...</strong>
+          </p>
+        </div>
       </div>
     </header>
 
@@ -79,13 +80,10 @@
       </div>
       <pre class="result-block"><code id="result"></code></pre>
 
-      <div class="section-title">
-        <h2>Warnings</h2>
-        <button type="button" id="copy-warnings" class="btn btn-secondary btn-small">
-          Copy Warnings
-        </button>
-      </div>
+      <h2>Warnings</h2>
       <pre id="warnings" class="result-block"></pre>
+
+      <p class="evaluation-line">Evaluation time: <strong id="evaluation-time">—</strong></p>
     </main>
 
     <script src="/playground/app.js"></script>
