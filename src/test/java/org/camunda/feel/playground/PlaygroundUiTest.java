@@ -2,7 +2,7 @@ package org.camunda.feel.playground;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.forwardedUrl;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import org.junit.jupiter.api.Test;
@@ -18,10 +18,10 @@ public final class PlaygroundUiTest {
   @Autowired private MockMvc mvc;
 
   @Test
-  void shouldForwardPlaygroundEndpoint() throws Exception {
+  void shouldRedirectPlaygroundEndpoint() throws Exception {
     mvc.perform(get("/playground"))
-        .andExpect(status().isOk())
-        .andExpect(forwardedUrl("/playground/index.html"));
+        .andExpect(status().is3xxRedirection())
+        .andExpect(redirectedUrl("/playground/index.html"));
   }
 
   @Test
@@ -35,6 +35,8 @@ public final class PlaygroundUiTest {
 
     assertThat(content).contains("FEEL Playground");
     assertThat(content).contains("Copy Share Link");
+    assertThat(content).contains("Import Share Link");
+    assertThat(content).contains("Format JSON");
     assertThat(content).contains("expression-type");
     assertThat(content).contains("/playground/app.js");
     assertThat(content).contains("/playground/styles.css");

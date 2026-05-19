@@ -1,9 +1,25 @@
 body {
-  background: #f8f9fa;
+  background: #f4f8fb;
+  color: #0f1f35;
+}
+
+.brand-header {
+  background: #ec5e00;
+  color: #fff;
 }
 
 .code-input {
   font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+}
+
+.btn-primary {
+  background-color: #0f1f35;
+  border-color: #0f1f35;
+}
+
+.btn-primary:hover {
+  background-color: #152e4f;
+  border-color: #152e4f;
 }
 
 .result-block {
@@ -14,4 +30,45 @@ body {
   padding: 0.75rem;
   white-space: pre-wrap;
   word-break: break-word;
+}
+
+.preview-block {
+  min-height: 2.8rem;
+  background: #fff;
+  border: 1px solid #dee2e6;
+  border-radius: 0.375rem;
+  padding: 0.6rem;
+  margin: 0;
+}
+
+.preview-block code {
+  background: transparent;
+  padding: 0;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+}
+
+.card {
+  border: 1px solid #d5dce5;
+}
+
+.token-key {
+  color: #0b57d0;
+}
+
+.token-string {
+  color: #0a7f3f;
+}
+
+.token-number {
+  color: #aa3a00;
+}
+
+.token-boolean,
+.token-null,
+.token-keyword {
+  color: #6d28d9;
+}
+
+.token-operator {
+  color: #334155;
 }

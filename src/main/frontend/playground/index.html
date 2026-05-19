@@ -12,8 +12,13 @@
     <link rel="stylesheet" href="/playground/styles.css" />
   </head>
   <body>
-    <main class="container py-4">
-      <h1 class="mb-3">FEEL Playground</h1>
+    <header class="brand-header py-3 mb-4">
+      <div class="container">
+        <h1 class="h3 mb-0">Camunda FEEL Playground</h1>
+      </div>
+    </header>
+
+    <main class="container pb-4">
 
       <p class="mb-4">
         Status: <strong id="server-status">Loading...</strong> · FEEL version:
@@ -32,6 +37,10 @@
         <div class="mb-3">
           <label for="expression" class="form-label">Expression</label>
           <textarea id="expression" class="form-control code-input" rows="4"></textarea>
+          <div class="mt-2">
+            <small class="text-secondary d-block mb-1">Syntax highlight</small>
+            <pre class="preview-block"><code id="expression-highlight"></code></pre>
+          </div>
         </div>
 
         <div class="mb-3" id="input-value-group">
@@ -40,8 +49,17 @@
         </div>
 
         <div class="mb-3">
-          <label for="context" class="form-label">Variables / Context (JSON object)</label>
+          <div class="d-flex justify-content-between align-items-center">
+            <label for="context" class="form-label mb-0">Variables / Context (JSON object)</label>
+            <button type="button" id="format-context" class="btn btn-sm btn-outline-secondary">
+              Format JSON
+            </button>
+          </div>
           <textarea id="context" class="form-control code-input" rows="6">{}</textarea>
+          <div class="mt-2">
+            <small class="text-secondary d-block mb-1">Syntax highlight</small>
+            <pre class="preview-block"><code id="context-highlight"></code></pre>
+          </div>
         </div>
 
         <div class="d-flex gap-2 flex-wrap">
@@ -52,10 +70,22 @@
         </div>
       </form>
 
+      <div class="card mt-3">
+        <div class="card-body">
+          <label for="import-link" class="form-label">Import Share Link</label>
+          <div class="input-group">
+            <input id="import-link" class="form-control" placeholder="Paste FEEL playground URL" />
+            <button type="button" id="import-link-button" class="btn btn-outline-secondary">
+              Import
+            </button>
+          </div>
+        </div>
+      </div>
+
       <hr class="my-4" />
 
       <h2 class="h4">Result</h2>
-      <pre id="result" class="result-block mb-3"></pre>
+      <pre class="result-block mb-3"><code id="result"></code></pre>
 
       <h2 class="h4">Warnings</h2>
       <pre id="warnings" class="result-block"></pre>
