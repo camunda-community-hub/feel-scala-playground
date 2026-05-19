@@ -1,54 +1,197 @@
+* {
+  box-sizing: border-box;
+}
+
 body {
+  margin: 0;
   background: #f4f8fb;
   color: #0f1f35;
+  font-family: Inter, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
 }
 
 .brand-header {
   background: #ec5e00;
   color: #fff;
+  padding: 1rem 0;
+  margin-bottom: 1.5rem;
 }
 
-.code-input {
+.brand-header h1 {
+  margin: 0;
+  font-size: 1.4rem;
+  font-weight: 700;
+}
+
+.container {
+  width: min(900px, calc(100% - 2rem));
+  margin: 0 auto;
+}
+
+.status-line {
+  margin: 0 0 1rem;
+}
+
+.form-group {
+  margin-bottom: 1rem;
+}
+
+label {
+  display: inline-block;
+  margin-bottom: 0.35rem;
+  font-weight: 600;
+}
+
+.split-line {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+}
+
+.field-select,
+.field-textarea,
+.field-input,
+.editor-input {
+  width: 100%;
+  border: 1px solid #cdd8e5;
+  border-radius: 0.4rem;
+  padding: 0.55rem 0.7rem;
+  font: inherit;
+  background: #fff;
+  color: #0f1f35;
+}
+
+.field-textarea {
+  min-height: 3.3rem;
+}
+
+.code-editor {
+  position: relative;
+  border: 1px solid #cdd8e5;
+  border-radius: 0.4rem;
+  background: #fff;
+  overflow: hidden;
+}
+
+.editor-highlight,
+.editor-input {
+  margin: 0;
+  border: 0;
+  border-radius: 0;
   font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+  font-size: 0.95rem;
+  line-height: 1.45;
+  white-space: pre;
+  overflow: auto;
+  tab-size: 2;
+  min-height: 7.5rem;
+}
+
+.editor-highlight {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  padding: 0.55rem 0.7rem;
+  color: #0f1f35;
+}
+
+.editor-input {
+  position: relative;
+  z-index: 1;
+  resize: vertical;
+  background: transparent;
+  color: transparent;
+  caret-color: #0f1f35;
+  padding: 0.55rem 0.7rem;
+}
+
+.editor-input::selection {
+  background: rgba(25, 118, 210, 0.2);
+}
+
+.button-row,
+.import-row {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.button-row {
+  margin-top: 0.35rem;
+}
+
+.btn {
+  border: 1px solid transparent;
+  border-radius: 0.4rem;
+  padding: 0.5rem 0.8rem;
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.btn-small {
+  padding: 0.28rem 0.55rem;
+  font-size: 0.85rem;
 }
 
 .btn-primary {
-  background-color: #0f1f35;
+  background: #0f1f35;
   border-color: #0f1f35;
+  color: #fff;
 }
 
 .btn-primary:hover {
-  background-color: #152e4f;
-  border-color: #152e4f;
+  background: #163153;
+}
+
+.btn-secondary {
+  background: #fff;
+  border-color: #9fb1c6;
+  color: #0f1f35;
+}
+
+.btn-secondary:hover {
+  background: #edf2f8;
+}
+
+.import-panel {
+  margin: 1rem 0 1.4rem;
+  border: 1px solid #d5dce5;
+  border-radius: 0.45rem;
+  background: #fff;
+}
+
+.import-panel summary {
+  padding: 0.55rem 0.75rem;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.import-panel[open] .import-row {
+  padding: 0 0.75rem 0.75rem;
+}
+
+h2 {
+  font-size: 1.1rem;
+  margin: 1rem 0 0.45rem;
+}
+
+hr {
+  border: 0;
+  border-top: 1px solid #d5dce5;
+  margin: 1rem 0;
 }
 
 .result-block {
   min-height: 3rem;
+  margin: 0;
   background: #fff;
   border: 1px solid #dee2e6;
   border-radius: 0.375rem;
   padding: 0.75rem;
   white-space: pre-wrap;
   word-break: break-word;
-}
-
-.preview-block {
-  min-height: 2.8rem;
-  background: #fff;
-  border: 1px solid #dee2e6;
-  border-radius: 0.375rem;
-  padding: 0.6rem;
-  margin: 0;
-}
-
-.preview-block code {
-  background: transparent;
-  padding: 0;
   font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
-}
-
-.card {
-  border: 1px solid #d5dce5;
 }
 
 .token-key {

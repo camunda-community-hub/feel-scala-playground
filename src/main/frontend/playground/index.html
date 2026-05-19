@@ -4,90 +4,79 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>FEEL Playground</title>
-    <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
-      rel="stylesheet"
-      integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB"
-      crossorigin="anonymous" />
     <link rel="stylesheet" href="/playground/styles.css" />
   </head>
   <body>
-    <header class="brand-header py-3 mb-4">
+    <header class="brand-header">
       <div class="container">
-        <h1 class="h3 mb-0">Camunda FEEL Playground</h1>
+        <h1>Camunda FEEL Playground</h1>
       </div>
     </header>
 
-    <main class="container pb-4">
+    <main class="container">
 
-      <p class="mb-4">
+      <p class="status-line">
         Status: <strong id="server-status">Loading...</strong> · FEEL version:
         <strong id="feel-version">Loading...</strong>
       </p>
 
       <form id="playground-form">
-        <div class="mb-3">
-          <label for="expression-type" class="form-label">Expression Type</label>
-          <select id="expression-type" class="form-select">
+        <div class="form-group">
+          <label for="expression-type">Expression Type</label>
+          <select id="expression-type" class="field-select">
             <option value="expression">Expression</option>
             <option value="unary-tests">Unary-tests</option>
           </select>
         </div>
 
-        <div class="mb-3">
-          <label for="expression" class="form-label">Expression</label>
-          <textarea id="expression" class="form-control code-input" rows="4"></textarea>
-          <div class="mt-2">
-            <small class="text-secondary d-block mb-1">Syntax highlight</small>
-            <pre class="preview-block"><code id="expression-highlight"></code></pre>
+        <div class="form-group">
+          <label for="expression">Expression</label>
+          <div class="code-editor">
+            <pre id="expression-highlight" class="editor-highlight" aria-hidden="true"></pre>
+            <textarea id="expression" class="editor-input" rows="4"></textarea>
           </div>
         </div>
 
-        <div class="mb-3" id="input-value-group">
-          <label for="input-value" class="form-label">Input value (JSON)</label>
-          <textarea id="input-value" class="form-control code-input" rows="3">null</textarea>
+        <div class="form-group" id="input-value-group">
+          <label for="input-value">Input value (JSON)</label>
+          <textarea id="input-value" class="field-textarea" rows="3">5</textarea>
         </div>
 
-        <div class="mb-3">
-          <div class="d-flex justify-content-between align-items-center">
-            <label for="context" class="form-label mb-0">Variables / Context (JSON object)</label>
-            <button type="button" id="format-context" class="btn btn-sm btn-outline-secondary">
+        <div class="form-group">
+          <div class="split-line">
+            <label for="context">Variables / Context (JSON object)</label>
+            <button type="button" id="format-context" class="btn btn-secondary btn-small">
               Format JSON
             </button>
           </div>
-          <textarea id="context" class="form-control code-input" rows="6">{}</textarea>
-          <div class="mt-2">
-            <small class="text-secondary d-block mb-1">Syntax highlight</small>
-            <pre class="preview-block"><code id="context-highlight"></code></pre>
+          <div class="code-editor">
+            <pre id="context-highlight" class="editor-highlight" aria-hidden="true"></pre>
+            <textarea id="context" class="editor-input" rows="6">{"x":5}</textarea>
           </div>
         </div>
 
-        <div class="d-flex gap-2 flex-wrap">
+        <div class="button-row">
           <button type="submit" class="btn btn-primary">Evaluate</button>
-          <button type="button" id="copy-link" class="btn btn-outline-secondary">
+          <button type="button" id="copy-link" class="btn btn-secondary">
             Copy Share Link
           </button>
         </div>
       </form>
 
-      <div class="card mt-3">
-        <div class="card-body">
-          <label for="import-link" class="form-label">Import Share Link</label>
-          <div class="input-group">
-            <input id="import-link" class="form-control" placeholder="Paste FEEL playground URL" />
-            <button type="button" id="import-link-button" class="btn btn-outline-secondary">
-              Import
-            </button>
-          </div>
+      <details class="import-panel" id="import-panel">
+        <summary>Import Share Link</summary>
+        <div class="import-row">
+          <input id="import-link" class="field-input" placeholder="Paste FEEL playground URL" />
+          <button type="button" id="import-link-button" class="btn btn-secondary">Import</button>
         </div>
-      </div>
+      </details>
 
-      <hr class="my-4" />
+      <hr />
 
-      <h2 class="h4">Result</h2>
-      <pre class="result-block mb-3"><code id="result"></code></pre>
+      <h2>Result</h2>
+      <pre class="result-block"><code id="result"></code></pre>
 
-      <h2 class="h4">Warnings</h2>
+      <h2>Warnings</h2>
       <pre id="warnings" class="result-block"></pre>
     </main>
 

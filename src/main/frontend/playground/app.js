@@ -13,17 +13,23 @@ const form = document.getElementById("playground-form");
 const copyLinkButton = document.getElementById("copy-link");
 const importLinkField = document.getElementById("import-link");
 const importLinkButton = document.getElementById("import-link-button");
+const importPanel = document.getElementById("import-panel");
 const formatContextButton = document.getElementById("format-context");
 
-function highlightCode(element, text, language) {
-  if (language === "json") {
-    element.innerHTML = highlightJson(text);
-  } else if (language === "javascript") {
-    element.innerHTML = highlightExpression(text);
-  } else {
-    element.textContent = text;
+const modeState = {
+  expression: {
+    expression: "x + 3",
+    context: "{\n  \"x\": 5\n}",
+    inputValue: "5"
+  },
+  "unary-tests": {
+    expression: "< 3",
+    context: "{}",
+    inputValue: "5"
   }
-}
+};
+
+let activeMode = "expression";
 
 function escapeHtml(value) {
   return value
@@ -55,18 +61,74 @@ function highlightJson(value) {
 
 function highlightExpression(value) {
   const escaped = escapeHtml(value);
-  let highlighted = escaped.replace(
-      /"([^"\\]|\\.)*"|'([^'\\]|\\.)*'/g,
-      (token) => `<span class="token-string">${token}</span>`);
-  highlighted = highlighted.replace(
-      /\b(and|or|not|true|false|null)\b/g,
-      (token) => `<span class="token-keyword">${token}</span>`);
-  highlighted = highlighted.replace(
-      /-?\d+(?:\.\d+)?/g,
-      (token) => `<span class="token-number">${token}</span>`);
-  return highlighted.replace(
-      /(&lt;|&gt;|<=|>=|=|!=|\+|-|\*|\/)/g,
-      (token) => `<span class="token-operator">${token}</span>`);
+  return escaped.replace(
+      /"([^"\\]|\\.)*"|'([^'\\]|\\.)*'|\b(?:and|or|not|between|in|true|false|null)\b|-?\d+(?:\.\d+)?(?:[eE][+\-]?\d+)?|<=|>=|!=|[<>+\-*/=(),.\[\]{}]/g,
+      (token) => {
+        if (/^"/.test(token) || /^'/.test(token)) {
+          return `<span class="token-string">${token}</span>`;
+        }
+        if (/^(and|or|not|between|in|true|false|null)$/.test(token)) {
+          return `<span class="token-keyword">${token}</span>`;
+        }
+        if (/^-?\d/.test(token)) {
+          return `<span class="token-number">${token}</span>`;
+        }
+        return `<span class="token-operator">${token}</span>`;
+      });
+}
+
+function highlightCode(element, text, language) {
+  if (language === "json") {
+    element.innerHTML = `${highlightJson(text)}\n`;
+  } else if (language === "feel") {
+    element.innerHTML = `${highlightExpression(text)}\n`;
+  } else {
+    element.textContent = text;
+  }
+}
+
+function syncEditorScroll(textarea, highlight) {
+  highlight.scrollTop = textarea.scrollTop;
+  highlight.scrollLeft = textarea.scrollLeft;
+}
+
+function formatJson(value) {
+  return JSON.stringify(value, null, 2);
+}
+
+function parseJson(text, fallback) {
+  if (!text || text.trim() === "") {
+    return fallback;
+  }
+  return JSON.parse(text);
+}
+
+function clearOutput() {
+  resultField.textContent = "";
+  warningsField.textContent = "";
+}
+
+function formatWarnings(warnings) {
+  if (!Array.isArray(warnings) || warnings.length === 0) {
+    return "";
+  }
+
+  return warnings
+      .map((warning) => {
+        if (typeof warning === "string") {
+          return `[warning] ${warning}`;
+        }
+
+        const type = warning.type || "warning";
+        const message = warning.message || formatJson(warning);
+        return `[${type}] ${message}`;
+      })
+      .join("\n");
+}
+
+function setOutput(result, warnings, isError = false) {
+  highlightCode(resultField, result, isError ? null : "json");
+  warningsField.textContent = formatWarnings(warnings);
 }
 
 function base64EncodeUtf8(value) {
@@ -88,36 +150,43 @@ function base64DecodeUtf8(value) {
   }
 }
 
-function parseJson(text, fallback) {
-  if (!text || text.trim() === "") {
-    return fallback;
-  }
-  return JSON.parse(text);
-}
-
-function formatJson(value) {
-  return JSON.stringify(value, null, 2);
-}
-
 function formatContextField() {
   const context = parseJson(contextField.value, {});
   contextField.value = formatJson(context);
   return context;
 }
 
-function setEvaluationType(type) {
-  expressionTypeField.value = type === "unary-tests" ? "unary-tests" : "expression";
-  inputValueGroup.hidden = expressionTypeField.value !== "unary-tests";
+function captureCurrentMode() {
+  modeState[activeMode] = {
+    expression: expressionField.value,
+    context: contextField.value,
+    inputValue: inputValueField.value
+  };
 }
 
-function setOutput(result, warnings, isError = false) {
-  highlightCode(resultField, result, isError ? null : "json");
-  warningsField.textContent = formatJson(warnings);
+function applyMode(mode) {
+  activeMode = mode === "unary-tests" ? "unary-tests" : "expression";
+  expressionTypeField.value = activeMode;
+  inputValueGroup.hidden = activeMode !== "unary-tests";
+
+  const preset = modeState[activeMode];
+  expressionField.value = preset.expression;
+  contextField.value = preset.context;
+  inputValueField.value = preset.inputValue;
+
+  refreshHighlights();
+}
+
+function switchMode(mode) {
+  captureCurrentMode();
+  applyMode(mode);
 }
 
 function refreshHighlights() {
-  highlightCode(expressionHighlightField, expressionField.value, "javascript");
+  highlightCode(expressionHighlightField, expressionField.value, "feel");
   highlightCode(contextHighlightField, contextField.value, "json");
+  syncEditorScroll(expressionField, expressionHighlightField);
+  syncEditorScroll(contextField, contextHighlightField);
 }
 
 async function loadServerInformation() {
@@ -149,15 +218,13 @@ function readForm() {
   return { expressionType, payload };
 }
 
-async function evaluate(event) {
-  event.preventDefault();
-
+async function evaluateCurrent() {
   try {
     const { expressionType, payload } = readForm();
     const path =
-        expressionType === "unary-tests"
-            ? "/api/v1/feel-unary-tests/evaluate"
-            : "/api/v1/feel/evaluate";
+      expressionType === "unary-tests"
+        ? "/api/v1/feel-unary-tests/evaluate"
+        : "/api/v1/feel/evaluate";
 
     const response = await fetch(path, {
       method: "POST",
@@ -176,6 +243,11 @@ async function evaluate(event) {
   } finally {
     refreshHighlights();
   }
+}
+
+async function evaluate(event) {
+  event.preventDefault();
+  await evaluateCurrent();
 }
 
 function buildShareableLink() {
@@ -207,7 +279,7 @@ async function copyLink() {
 function applyQueryParameters(params) {
   const expressionType = params.get("expression-type");
   if (expressionType) {
-    setEvaluationType(expressionType);
+    applyMode(expressionType);
   }
 
   const expression = params.get("expression");
@@ -230,42 +302,63 @@ function applyQueryParameters(params) {
   } catch (error) {
     // ignore invalid context from imported links
   }
+
+  captureCurrentMode();
+  refreshHighlights();
 }
 
 function fillFromQueryParameters() {
   const params = new URLSearchParams(window.location.search);
-  applyQueryParameters(params);
+  if (params.size > 0) {
+    applyQueryParameters(params);
+  }
 }
 
-function importLink() {
+async function importLink() {
+  clearOutput();
   try {
     const url = new URL(importLinkField.value.trim(), window.location.origin);
     applyQueryParameters(url.searchParams);
-    refreshHighlights();
+    importLinkField.value = "";
+    importPanel.open = false;
+    await evaluateCurrent();
   } catch (error) {
     setOutput("Invalid link", [], true);
   }
 }
 
 expressionTypeField.addEventListener("change", () => {
-  setEvaluationType(expressionTypeField.value);
+  switchMode(expressionTypeField.value);
 });
-expressionField.addEventListener("input", refreshHighlights);
-contextField.addEventListener("input", refreshHighlights);
+expressionField.addEventListener("input", () => {
+  captureCurrentMode();
+  refreshHighlights();
+});
+expressionField.addEventListener("scroll", () => {
+  syncEditorScroll(expressionField, expressionHighlightField);
+});
+contextField.addEventListener("input", () => {
+  captureCurrentMode();
+  refreshHighlights();
+});
+contextField.addEventListener("scroll", () => {
+  syncEditorScroll(contextField, contextHighlightField);
+});
+inputValueField.addEventListener("input", captureCurrentMode);
 form.addEventListener("submit", evaluate);
 copyLinkButton.addEventListener("click", copyLink);
 importLinkButton.addEventListener("click", importLink);
 formatContextButton.addEventListener("click", () => {
   try {
     formatContextField();
+    captureCurrentMode();
     refreshHighlights();
   } catch (error) {
-    setOutput(error.message, []);
+    setOutput(error.message, [], true);
   }
 });
 
-setEvaluationType("expression");
+applyMode("expression");
 fillFromQueryParameters();
 loadServerInformation();
-refreshHighlights();
-setOutput("", []);
+clearOutput();

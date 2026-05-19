@@ -38,8 +38,12 @@ public final class PlaygroundUiTest {
     assertThat(content).contains("Import Share Link");
     assertThat(content).contains("Format JSON");
     assertThat(content).contains("expression-type");
+    assertThat(content).contains("import-panel");
+    assertThat(content).contains("expression-highlight");
+    assertThat(content).contains("context-highlight");
     assertThat(content).contains("/playground/app.js");
     assertThat(content).contains("/playground/styles.css");
+    assertThat(content).doesNotContain("cdn.jsdelivr.net");
   }
 
   @Test
