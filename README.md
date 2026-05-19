@@ -117,6 +117,17 @@ The application is available as a docker image on DockerHub: `camunda/feel-scala
 docker run -p 8080:8080 camunda/feel-scala-playground
 ```
 
+## Configuration
+
+The following configuration options are available:
+
+| Property                             | Default | Description |
+|--------------------------------------|---------|-------------|
+| `server.port`                        | `8080`  | HTTP port used by the application (can also be set via `PORT`). |
+| `playground.tracking.enabled`        | `false` | Enables tracking of FEEL evaluations. |
+| `playground.feel.evaluation.timeout` | `10s`   | Maximum time allowed for one FEEL evaluation or unary-tests evaluation. |
+| `MIXPANEL_PROJECT_TOKEN`             | -       | Required when `playground.tracking.enabled=true`; Mixpanel project token used for tracking. |
+
 ## Development
 
 The project uses Maven as the build tool. To run the application locally, use this command:
