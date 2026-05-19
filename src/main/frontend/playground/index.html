@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>FEEL-Scala Playground</title>
+    <link rel="stylesheet" href="/webjars/bootstrap/5.3.8/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="/playground/styles.css" />
+  </head>
+  <body>
+    <header class="brand-header py-3 mb-4">
+      <div class="container">
+        <div class="header-row">
+          <h1 class="h3 mb-0">FEEL-Scala Playground</h1>
+          <p class="metadata-line mb-0">
+            Status: <strong id="server-status">Loading...</strong> · FEEL version:
+            <strong id="feel-version">Loading...</strong>
+          </p>
+        </div>
+      </div>
+    </header>
+
+    <main class="container pb-4">
+      <form id="playground-form">
+        <div class="mb-3">
+          <label for="expression-type" class="form-label">Expression Type</label>
+          <select id="expression-type" class="form-select">
+            <option value="expression">Expression</option>
+            <option value="unary-tests">Unary-tests</option>
+          </select>
+        </div>
+
+        <div class="mb-3">
+          <label for="expression" class="form-label">Expression</label>
+          <div class="code-editor">
+            <pre id="expression-highlight" class="editor-highlight" aria-hidden="true"></pre>
+            <textarea id="expression" class="editor-input" rows="4"></textarea>
+          </div>
+        </div>
+
+        <div class="mb-3" id="input-value-group">
+          <label for="input-value" class="form-label">Input value (JSON)</label>
+          <textarea id="input-value" class="form-control" rows="3">5</textarea>
+        </div>
+
+        <div class="mb-3">
+          <div class="split-line">
+            <label for="context" class="form-label mb-0">Variables / Context (JSON object)</label>
+            <button type="button" id="format-context" class="btn btn-secondary btn-small">
+              Format JSON
+            </button>
+          </div>
+          <div class="code-editor">
+            <pre id="context-highlight" class="editor-highlight" aria-hidden="true"></pre>
+            <textarea id="context" class="editor-input" rows="6">{"x":5}</textarea>
+          </div>
+        </div>
+
+        <div class="button-row d-flex gap-2 flex-wrap">
+          <button type="submit" class="btn btn-primary">Evaluate</button>
+          <button type="button" id="copy-link" class="btn btn-secondary">
+            Copy Share Link
+          </button>
+        </div>
+      </form>
+
+      <details class="import-panel" id="import-panel">
+        <summary class="fw-semibold">Import Share Link</summary>
+        <div class="import-row">
+          <input id="import-link" class="form-control" placeholder="Paste FEEL playground URL" />
+          <button type="button" id="import-link-button" class="btn btn-secondary">Import</button>
+        </div>
+      </details>
+
+      <hr />
+
+      <div class="section-title">
+        <h2>Result</h2>
+        <button type="button" id="copy-result" class="btn btn-secondary btn-small">Copy Result</button>
+      </div>
+      <pre class="result-block"><code id="result"></code></pre>
+
+      <h2>Warnings</h2>
+      <pre id="warnings" class="result-block"></pre>
+
+      <p class="evaluation-line">Evaluation time: <strong id="evaluation-time">—</strong></p>
+    </main>
+
+    <script src="/playground/app.js"></script>
+  </body>
+</html>
