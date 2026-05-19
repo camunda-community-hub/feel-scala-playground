@@ -6,6 +6,8 @@
 
 This repository contains the API for the FEEL-Scala Playground: https://camunda.github.io/feel-scala/docs/playground/
 
+The repository also contains a lightweight frontend playground available at `/playground`.
+
 ```bash
 curl --header "Content-Type: application/json" \
 -X POST \
@@ -97,6 +99,18 @@ Response:
 {
   "feelEngineVersion": "1.16.0"
 }
+```
+
+### Frontend playground
+
+- Type: `GET`
+- Path: `/playground`
+
+The frontend supports evaluating FEEL expressions and unary-tests expressions, shows server status and FEEL version,
+and can import/export share links compatible with:
+
+```
+https://camunda.github.io/feel-scala/docs/playground/?expression-type=expression&expression=MyArIHg%3D&context=ewogICJ4IjogNQp9
 ```
 
 ## Install

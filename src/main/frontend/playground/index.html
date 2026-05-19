@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>FEEL Playground</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB"
+      crossorigin="anonymous" />
+    <link rel="stylesheet" href="/playground/styles.css" />
+  </head>
+  <body>
+    <main class="container py-4">
+      <h1 class="mb-3">FEEL Playground</h1>
+
+      <p class="mb-4">
+        Status: <strong id="server-status">Loading...</strong> · FEEL version:
+        <strong id="feel-version">Loading...</strong>
+      </p>
+
+      <form id="playground-form">
+        <div class="mb-3">
+          <label for="expression-type" class="form-label">Expression Type</label>
+          <select id="expression-type" class="form-select">
+            <option value="expression">Expression</option>
+            <option value="unary-tests">Unary-tests</option>
+          </select>
+        </div>
+
+        <div class="mb-3">
+          <label for="expression" class="form-label">Expression</label>
+          <textarea id="expression" class="form-control code-input" rows="4"></textarea>
+        </div>
+
+        <div class="mb-3" id="input-value-group">
+          <label for="input-value" class="form-label">Input value (JSON)</label>
+          <textarea id="input-value" class="form-control code-input" rows="3">null</textarea>
+        </div>
+
+        <div class="mb-3">
+          <label for="context" class="form-label">Variables / Context (JSON object)</label>
+          <textarea id="context" class="form-control code-input" rows="6">{}</textarea>
+        </div>
+
+        <div class="d-flex gap-2 flex-wrap">
+          <button type="submit" class="btn btn-primary">Evaluate</button>
+          <button type="button" id="copy-link" class="btn btn-outline-secondary">
+            Copy Share Link
+          </button>
+        </div>
+      </form>
+
+      <hr class="my-4" />
+
+      <h2 class="h4">Result</h2>
+      <pre id="result" class="result-block mb-3"></pre>
+
+      <h2 class="h4">Warnings</h2>
+      <pre id="warnings" class="result-block"></pre>
+    </main>
+
+    <script src="/playground/app.js"></script>
+  </body>
+</html>
