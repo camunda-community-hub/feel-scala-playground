@@ -4,4 +4,4 @@ metadata:
   name: feel-service-managed-cert
 spec:
   domains:
-    - feel-service.camunda.com
+    - feel-playground.camunda.com

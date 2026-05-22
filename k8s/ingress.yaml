@@ -3,12 +3,21 @@ kind: Ingress
 metadata:
   name: feel-scala-playground-ingress
   annotations:
-    kubernetes.io/ingress.global-static-ip-name: feel-scala-playground-ip
-    networking.gke.io/managed-certificates: feel-service-managed-cert
-    kubernetes.io/ingress.class: "gce"
+    cert-manager.io/cluster-issuer: letsencrypt
 spec:
-  defaultBackend:
-    service:
-      name: feel-scala-playground-service
-      port:
-        number: 8080
+  ingressClassName: traefik
+  tls:
+    - hosts:
+        - feel-playground.camunda.com
+      secretName: feel-playground-tls
+  rules:
+    - host: feel-playground.camunda.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: feel-scala-playground-service
+                port:
+                  number: 8080
