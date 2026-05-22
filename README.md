@@ -4,7 +4,24 @@
 
 # FEEL-Scala Playground
 
-This repository contains an API for evaluating FEEL expressions using the [FEEL-Scala engine](https://github.com/camunda/feel-scala).
+This repository contains an API and a lightweight playground frontend for evaluating FEEL expressions using the [FEEL-Scala engine](https://github.com/camunda/feel-scala).
+
+## Install
+
+The application is available as a Docker image. You can run it with the following command:
+
+```bash
+docker run -p 8080:8080 ghcr.io/camunda-community-hub/feel-scala-playground
+```
+
+- Playground: http://localhost:8080/playground
+- API endpoints: `http://localhost:8080/api/v1/*` 
+
+## Usage
+
+The API has the following endpoints.
+
+Example request: 
 
 ```bash
 curl --header "Content-Type: application/json" \
@@ -12,12 +29,6 @@ curl --header "Content-Type: application/json" \
 -d '{"expression":"x + y", "context":{"x": 2, "y": 3}, "metadata": {"source": "test"}}' \
 API_URL/api/v1/feel/evaluate
 ```
-
-Additionally, the repository also contains a lightweight frontend playground available at `/playground`.
-
-## Usage
-
-The API has the following endpoints:
 
 ### Evaluate expression
 
@@ -101,21 +112,13 @@ Response:
 }
 ```
 
-### Frontend playground
+### Playground
 
 - Type: `GET`
 - Path: `/playground`
 
-The frontend supports evaluating FEEL expressions and unary-tests expressions, shows server status and FEEL version,
+The playground frontend supports evaluating FEEL expressions and unary-tests expressions, shows server status and FEEL version,
 and can import/export share links.
-
-## Install
-
-The application is available as a docker image on DockerHub: `camunda/feel-scala-playground`. You can run it like so:
-
-```bash
-docker run -p 8080:8080 camunda/feel-scala-playground
-```
 
 ## Configuration
 
@@ -136,4 +139,4 @@ The project uses Maven as the build tool. To run the application locally, use th
 mvn spring-boot:run
 ```
 
-Access the API at `http://localhost:8080/api/v1/feel/evaluate` and the frontend playground at http://localhost:8080/playground.
+Access the API at `http://localhost:8080/api/v1/*` and the frontend playground at http://localhost:8080/playground.
