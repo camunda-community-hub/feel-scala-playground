@@ -1,4 +1,4 @@
-# Contributing guide
+# Installation guide
 
 ## Install on K8s
 
