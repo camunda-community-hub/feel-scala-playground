@@ -1,6 +1,6 @@
-# Installation guide
+# K8s setup
 
-## Install on K8s
+## Install 
 
 The following notes describe how to deploy to Google Cloud Kubernetes Cluster
 
