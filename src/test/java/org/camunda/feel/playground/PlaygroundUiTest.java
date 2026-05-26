@@ -47,6 +47,7 @@ public final class PlaygroundUiTest {
     assertThat(content).contains("/playground/styles.css");
     assertThat(content).contains("/webjars/bootstrap/5.3.8/css/bootstrap.min.css");
     assertThat(content).doesNotContain("cdn.jsdelivr.net");
+    assertThat(content).contains("https://github.com/camunda-community-hub/feel-scala-playground");
   }
 
   @Test
