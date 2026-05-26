@@ -214,7 +214,7 @@ function readForm() {
   const expression = expressionField.value;
   const context = formatContextField();
 
-  const payload = { expression, context };
+  const payload = { expression, context, metadata: { source: "feel-scala-playground" } };
   if (expressionType === "unary-tests") {
     payload.inputValue = parseJson(inputValueField.value, null);
   }
