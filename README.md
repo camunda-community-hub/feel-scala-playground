@@ -120,6 +120,54 @@ Response:
 The playground frontend supports evaluating FEEL expressions and unary-tests expressions, shows server status and FEEL version,
 and can import/export share links.
 
+## MCP Server
+
+The application exposes the FEEL evaluation API as an [MCP (Model Context Protocol)](https://modelcontextprotocol.io/) server. This allows AI models and MCP-compatible clients to evaluate FEEL expressions as tools.
+
+### Connection
+
+The MCP server uses the SSE (Server-Sent Events) transport and is available at:
+
+- SSE endpoint: `http://localhost:8080/sse`
+- Message endpoint: `http://localhost:8080/mcp/message`
+
+### Tools
+
+The following tools are exposed:
+
+#### `evaluate_feel_expression`
+
+Evaluates a FEEL expression with an optional context.
+
+| Parameter    | Type        | Required | Description                              |
+|--------------|-------------|----------|------------------------------------------|
+| `expression` | `string`    | yes      | The FEEL expression to evaluate          |
+| `context`    | JSON object | no       | Context variables available to the expression |
+
+#### `evaluate_feel_unary_tests`
+
+Evaluates a FEEL unary-tests expression against an input value with an optional context.
+
+| Parameter    | Type        | Required | Description                                          |
+|--------------|-------------|----------|------------------------------------------------------|
+| `expression` | `string`    | yes      | The FEEL unary-tests expression to evaluate          |
+| `inputValue` | any         | yes      | The input value to test against                      |
+| `context`    | JSON object | no       | Context variables available to the expression        |
+
+### MCP Client Configuration Example
+
+To connect an MCP client (e.g. Claude Desktop) to the server, use the following configuration:
+
+```json
+{
+  "mcpServers": {
+    "feel-scala-mcp": {
+      "url": "http://localhost:8080/sse"
+    }
+  }
+}
+```
+
 ## Configuration
 
 The following configuration options are available:
