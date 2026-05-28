@@ -21,10 +21,6 @@ public final class VersionResponse {
     this.feelEngineVersion = feelEngineVersion;
   }
 
-  public static VersionResponse current() {
-    return withVersion(FeelEngine.class.getPackage().getImplementationVersion());
-  }
-
   public static VersionResponse withVersion(String version) {
     final var response = new VersionResponse();
     response.feelEngineVersion = version;

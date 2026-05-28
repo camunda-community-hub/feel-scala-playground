@@ -8,6 +8,8 @@
 package org.camunda.feel.playground.sevice;
 
 import java.util.Map;
+
+import org.camunda.feel.playground.api.VersionController;
 import org.camunda.feel.playground.dto.FeelEvaluationResponse;
 import org.camunda.feel.playground.dto.VersionResponse;
 import org.slf4j.Logger;
@@ -86,6 +88,6 @@ public class FeelMcpTools {
       name = "get_feel_version",
       description = "Return the version of the FEEL-Scala engine used to evaluate expressions.")
   public VersionResponse getFeelVersion() {
-    return VersionResponse.current();
+    return VersionResponse.withVersion(VersionController.FEEL_ENGINE_VERSION);
   }
 }

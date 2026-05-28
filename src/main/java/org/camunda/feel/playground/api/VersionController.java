@@ -1,5 +1,6 @@
 package org.camunda.feel.playground.api;
 
+import org.camunda.feel.FeelEngine;
 import org.camunda.feel.playground.dto.VersionResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,8 +14,11 @@ import org.springframework.web.bind.annotation.RestController;
 @CrossOrigin()
 public class VersionController {
 
-  @GetMapping
-  public ResponseEntity<VersionResponse> getVersion() {
-    return new ResponseEntity<>(VersionResponse.current(), HttpStatus.OK);
-  }
+    public static final String FEEL_ENGINE_VERSION =
+            FeelEngine.class.getPackage().getImplementationVersion();
+
+    @GetMapping
+    public ResponseEntity<VersionResponse> getVersion() {
+        return new ResponseEntity<>(VersionResponse.withVersion(FEEL_ENGINE_VERSION), HttpStatus.OK);
+    }
 }
