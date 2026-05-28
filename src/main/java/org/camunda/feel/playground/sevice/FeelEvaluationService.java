@@ -57,8 +57,9 @@ public final class FeelEvaluationService implements AutoCloseable {
   }
 
   public EvaluationResult evaluate(String expression, Map<String, Object> context) {
-      final var evaluationContext = Optional.ofNullable(context).orElse(Collections.emptyMap());
-      return evaluateWithTimeout(() -> feelEngineApi.evaluateExpression(expression, evaluationContext));
+    final var evaluationContext = Optional.ofNullable(context).orElse(Collections.emptyMap());
+    return evaluateWithTimeout(
+        () -> feelEngineApi.evaluateExpression(expression, evaluationContext));
   }
 
   public EvaluationResult evaluateUnaryTests(
