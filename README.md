@@ -20,7 +20,7 @@ docker run -p 8080:8080 ghcr.io/camunda-community-hub/feel-scala-playground
 
 - Playground frontend: http://localhost:8080/playground
 - API endpoints: `http://localhost:8080/api/v1/*`
-- MCP server: `http://localhost:8080/sse` (SSE endpoint), `http://localhost:8080/mcp/message` (message endpoint)
+- MCP server: `http://localhost:8080/sse`
 
 ## Usage
 
