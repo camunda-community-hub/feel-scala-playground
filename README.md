@@ -4,7 +4,11 @@
 
 # FEEL-Scala Playground
 
-This repository contains an API and a lightweight playground frontend for evaluating FEEL expressions using the [FEEL-Scala engine](https://github.com/camunda/feel-scala).
+The playground allows evaluating FEEL expressions using the [FEEL-Scala engine](https://github.com/camunda/feel-scala). It contains:
+
+- An interactive frontend for users
+- A REST API for programmatic access
+- An MCP (Model Context Protocol) server for AI model integration
 
 ## Install
 
@@ -14,14 +18,15 @@ The application is available as a Docker image. You can run it with the followin
 docker run -p 8080:8080 ghcr.io/camunda-community-hub/feel-scala-playground
 ```
 
-- Playground: http://localhost:8080/playground
-- API endpoints: `http://localhost:8080/api/v1/*` 
+- Playground frontend: http://localhost:8080/playground
+- API endpoints: `http://localhost:8080/api/v1/*`
+- MCP server: `http://localhost:8080/sse`
 
 ## Usage
 
 The API has the following endpoints.
 
-Example request: 
+Example request:
 
 ```bash
 curl --header "Content-Type: application/json" \
@@ -119,6 +124,62 @@ Response:
 
 The playground frontend supports evaluating FEEL expressions and unary-tests expressions, shows server status and FEEL version,
 and can import/export share links.
+
+## MCP Server
+
+The application exposes the FEEL evaluation API as an [MCP (Model Context Protocol)](https://modelcontextprotocol.io/) server. This allows AI models and MCP-compatible clients to evaluate FEEL expressions as tools.
+
+### Connection
+
+The MCP server uses the SSE (Server-Sent Events) transport and is available at:
+
+- SSE endpoint: `http://localhost:8080/sse`
+- Message endpoint: `http://localhost:8080/mcp/message`
+
+### Tools
+
+The following tools are exposed:
+
+#### `evaluate_feel_expression`
+
+Evaluates a FEEL expression with an optional context.
+
+| Parameter    | Type        | Required | Description                              |
+|--------------|-------------|----------|------------------------------------------|
+| `expression` | `string`    | yes      | The FEEL expression to evaluate          |
+| `context`    | JSON object | no       | Context variables available to the expression |
+
+#### `evaluate_feel_unary_tests`
+
+Evaluates a FEEL unary-tests expression against an input value with an optional context.
+
+| Parameter    | Type        | Required | Description                                          |
+|--------------|-------------|----------|------------------------------------------------------|
+| `expression` | `string`    | yes      | The FEEL unary-tests expression to evaluate          |
+| `inputValue` | any         | yes      | The input value to test against                      |
+| `context`    | JSON object | no       | Context variables available to the expression        |
+
+### Resources
+
+The following resources are exposed:
+
+#### `feel://version`
+
+Returns the version of the FEEL-Scala engine used to evaluate expressions.
+
+### MCP Client Configuration Example
+
+To connect an MCP client (e.g. Claude Desktop) to the server, use the following configuration:
+
+```json
+{
+  "mcpServers": {
+    "feel-scala-mcp": {
+      "url": "http://localhost:8080/sse"
+    }
+  }
+}
+```
 
 ## Configuration
 

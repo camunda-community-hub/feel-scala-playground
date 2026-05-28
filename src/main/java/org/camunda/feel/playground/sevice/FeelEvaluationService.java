@@ -9,6 +9,7 @@ package org.camunda.feel.playground.sevice;
 
 import jakarta.annotation.PreDestroy;
 import java.time.Duration;
+import java.util.Collections;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ExecutionException;
@@ -56,13 +57,16 @@ public final class FeelEvaluationService implements AutoCloseable {
   }
 
   public EvaluationResult evaluate(String expression, Map<String, Object> context) {
-    return evaluateWithTimeout(() -> feelEngineApi.evaluateExpression(expression, context));
+    final var evaluationContext = Optional.ofNullable(context).orElse(Collections.emptyMap());
+    return evaluateWithTimeout(
+        () -> feelEngineApi.evaluateExpression(expression, evaluationContext));
   }
 
   public EvaluationResult evaluateUnaryTests(
       String expression, Object inputValue, Map<String, Object> context) {
+    final var evaluationContext = Optional.ofNullable(context).orElse(Collections.emptyMap());
     return evaluateWithTimeout(
-        () -> feelEngineApi.evaluateUnaryTests(expression, inputValue, context));
+        () -> feelEngineApi.evaluateUnaryTests(expression, inputValue, evaluationContext));
   }
 
   private EvaluationResult evaluateWithTimeout(Supplier<EvaluationResult> evaluation) {

@@ -14,11 +14,11 @@ import org.springframework.web.bind.annotation.RestController;
 @CrossOrigin()
 public class VersionController {
 
-  private static final String feelEngineVersion =
+  public static final String FEEL_ENGINE_VERSION =
       FeelEngine.class.getPackage().getImplementationVersion();
 
   @GetMapping
   public ResponseEntity<VersionResponse> getVersion() {
-    return new ResponseEntity<>(VersionResponse.withVersion(feelEngineVersion), HttpStatus.OK);
+    return new ResponseEntity<>(VersionResponse.withVersion(FEEL_ENGINE_VERSION), HttpStatus.OK);
   }
 }

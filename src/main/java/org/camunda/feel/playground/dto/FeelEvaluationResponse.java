@@ -8,6 +8,8 @@
 package org.camunda.feel.playground.dto;
 
 import java.util.List;
+import java.util.stream.Collectors;
+import org.camunda.feel.api.EvaluationResult;
 
 public final class FeelEvaluationResponse {
 
@@ -50,6 +52,26 @@ public final class FeelEvaluationResponse {
     final var response = new FeelEvaluationResponse();
     response.setError(error);
     return response;
+  }
+
+  public static FeelEvaluationResponse of(EvaluationResult result) {
+    final var warnings =
+        result.getSuppressedFailures().stream()
+            .map(
+                failure ->
+                    FeelEvaluationWarning.of(
+                        failure.failureType().toString(), failure.failureMessage()))
+            .collect(Collectors.toList());
+
+    if (result.isSuccess()) {
+      final var response = withResult(result.result());
+      response.setWarnings(warnings);
+      return response;
+    } else {
+      final var response = withError(result.failure().message());
+      response.setWarnings(warnings);
+      return response;
+    }
   }
 
   @Override
