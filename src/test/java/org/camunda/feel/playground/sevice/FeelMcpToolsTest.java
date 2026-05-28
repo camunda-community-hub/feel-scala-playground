@@ -32,6 +32,7 @@ public final class FeelMcpToolsTest {
 
     assertThat(response.getResult()).isEqualTo(3L);
     assertThat(response.getError()).isNull();
+    assertThat(response.getEvaluationTime()).isNotNull();
   }
 
   @Test
@@ -41,6 +42,7 @@ public final class FeelMcpToolsTest {
 
     assertThat(response.getError()).isNotNull();
     assertThat(response.getResult()).isNull();
+    assertThat(response.getEvaluationTime()).isNotNull();
   }
 
   @Test
@@ -50,6 +52,7 @@ public final class FeelMcpToolsTest {
     assertThat(response.getResult()).isNull();
     assertThat(response.getWarnings()).isNotEmpty();
     assertThat(response.getWarnings().get(0).getType()).isEqualTo("NO_VARIABLE_FOUND");
+    assertThat(response.getEvaluationTime()).isNotNull();
   }
 
   @Test
@@ -59,6 +62,7 @@ public final class FeelMcpToolsTest {
 
     assertThat(response.getResult()).isEqualTo(true);
     assertThat(response.getError()).isNull();
+    assertThat(response.getEvaluationTime()).isNotNull();
   }
 
   @Test

@@ -223,7 +223,6 @@ function readForm() {
 }
 
 async function evaluateCurrent() {
-  const startTime = performance.now();
   try {
     const { expressionType, payload } = readForm();
     const path =
@@ -243,11 +242,15 @@ async function evaluateCurrent() {
     } else {
       setOutput(formatJson(data.result), data.warnings || []);
     }
+    if (typeof data.evaluationTime === "number") {
+      evaluationTimeField.textContent = `${data.evaluationTime} ms`;
+    } else {
+      evaluationTimeField.textContent = "—";
+    }
   } catch (error) {
     setOutput(error.message, [], true);
+    evaluationTimeField.textContent = "—";
   } finally {
-    const elapsedMs = Math.round((performance.now() - startTime) * 10) / 10;
-    evaluationTimeField.textContent = `${elapsedMs} ms`;
     refreshHighlights();
   }
 }

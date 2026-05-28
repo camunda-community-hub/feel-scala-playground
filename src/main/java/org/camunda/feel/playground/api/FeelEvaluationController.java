@@ -36,13 +36,18 @@ public class FeelEvaluationController {
       @RequestBody FeelEvaluationRequest request) {
 
     LOG.debug("Evaluate FEEL expression: {}", request);
+    final long startTime = System.nanoTime();
 
     try {
       final var result = evaluationService.evaluate(request.expression, request.context);
-      return new ResponseEntity<>(FeelEvaluationResponse.of(result), HttpStatus.OK);
+      final var response = FeelEvaluationResponse.of(result);
+      response.setEvaluationTime((System.nanoTime() - startTime) / 1_000_000);
+      return new ResponseEntity<>(response, HttpStatus.OK);
 
     } catch (Exception e) {
-      return new ResponseEntity<>(FeelEvaluationResponse.withError(e.getMessage()), HttpStatus.OK);
+      final var response = FeelEvaluationResponse.withError(e.getMessage());
+      response.setEvaluationTime((System.nanoTime() - startTime) / 1_000_000);
+      return new ResponseEntity<>(response, HttpStatus.OK);
 
     } finally {
       trackingService.trackExpressionEvaluation(request.metadata);
@@ -54,16 +59,21 @@ public class FeelEvaluationController {
       @RequestBody FeelUnaryTestsEvaluationRequest request) {
 
     LOG.debug("Evaluate FEEL unary-tests expression: {}", request);
+    final long startTime = System.nanoTime();
 
     try {
       final var result =
           evaluationService.evaluateUnaryTests(
               request.expression, request.inputValue, request.context);
 
-      return new ResponseEntity<>(FeelEvaluationResponse.of(result), HttpStatus.OK);
+      final var response = FeelEvaluationResponse.of(result);
+      response.setEvaluationTime((System.nanoTime() - startTime) / 1_000_000);
+      return new ResponseEntity<>(response, HttpStatus.OK);
 
     } catch (Exception e) {
-      return new ResponseEntity<>(FeelEvaluationResponse.withError(e.getMessage()), HttpStatus.OK);
+      final var response = FeelEvaluationResponse.withError(e.getMessage());
+      response.setEvaluationTime((System.nanoTime() - startTime) / 1_000_000);
+      return new ResponseEntity<>(response, HttpStatus.OK);
 
     } finally {
       trackingService.trackUnaryTestsExpressionEvaluation(request.metadata);

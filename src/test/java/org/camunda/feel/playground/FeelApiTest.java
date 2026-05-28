@@ -10,6 +10,7 @@ package org.camunda.feel.playground;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import org.junit.jupiter.api.Test;
@@ -34,7 +35,8 @@ public final class FeelApiTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{\"expression\": \"1 + x\", \"context\": {\"x\": 2}}"))
         .andExpect(status().isOk())
-        .andExpect(content().json("{'result': 3}"));
+        .andExpect(content().json("{'result': 3}"))
+        .andExpect(jsonPath("$.evaluationTime").isNumber());
   }
 
   @CsvSource(
@@ -114,6 +116,7 @@ public final class FeelApiTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{\"expression\": \"> x\", \"inputValue\": 5, \"context\": {\"x\": 2}}"))
         .andExpect(status().isOk())
-        .andExpect(content().json("{'result': true}"));
+        .andExpect(content().json("{'result': true}"))
+        .andExpect(jsonPath("$.evaluationTime").isNumber());
   }
 }
