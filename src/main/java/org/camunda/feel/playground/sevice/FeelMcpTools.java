@@ -13,8 +13,8 @@ import org.camunda.feel.playground.dto.FeelEvaluationResponse;
 import org.camunda.feel.playground.dto.VersionResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.ai.tool.annotation.Tool;
-import org.springframework.ai.tool.annotation.ToolParam;
+import org.springframework.ai.mcp.annotation.McpTool;
+import org.springframework.ai.mcp.annotation.McpToolParam;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -33,14 +33,20 @@ public class FeelMcpTools {
     this.trackingService = trackingService;
   }
 
-  @Tool(
+  @McpTool(
       name = "evaluate_feel_expression",
       description =
           "Evaluate a FEEL (Friendly Enough Expression Language) expression with an optional"
-              + " context. Returns the result or an error message if the evaluation fails.")
+              + " context. Returns the result or an error message if the evaluation fails.",
+      annotations =
+          @McpTool.McpAnnotations(
+              title = "FEEL Expression Evaluation",
+              idempotentHint = true,
+              destructiveHint = false,
+              openWorldHint = false))
   public FeelEvaluationResponse evaluateFeelExpression(
-      @ToolParam(description = "The FEEL expression to evaluate") final String expression,
-      @ToolParam(description = "The context variables as a JSON object", required = false)
+      @McpToolParam(description = "The FEEL expression to evaluate") final String expression,
+      @McpToolParam(description = "The context variables as a JSON object", required = false)
           final Map<String, Object> context) {
 
     LOG.debug("Evaluate FEEL expression via MCP: {}", expression);
@@ -57,16 +63,22 @@ public class FeelMcpTools {
     }
   }
 
-  @Tool(
+  @McpTool(
       name = "evaluate_feel_unary_tests",
       description =
           "Evaluate a FEEL (Friendly Enough Expression Language) unary-tests expression against an"
-              + " input value with an optional context. Returns true/false or an error message.")
+              + " input value with an optional context. Returns true/false or an error message.",
+      annotations =
+          @McpTool.McpAnnotations(
+              title = "FEEL Unary-Tests Evaluation",
+              idempotentHint = true,
+              destructiveHint = false,
+              openWorldHint = false))
   public FeelEvaluationResponse evaluateFeelUnaryTests(
-      @ToolParam(description = "The FEEL unary-tests expression to evaluate")
+      @McpToolParam(description = "The FEEL unary-tests expression to evaluate")
           final String expression,
-      @ToolParam(description = "The input value to test against") final Object inputValue,
-      @ToolParam(description = "The context variables as a JSON object", required = false)
+      @McpToolParam(description = "The input value to test against") final Object inputValue,
+      @McpToolParam(description = "The context variables as a JSON object", required = false)
           final Map<String, Object> context) {
 
     LOG.debug("Evaluate FEEL unary-tests expression via MCP: {}", expression);
@@ -83,7 +95,7 @@ public class FeelMcpTools {
     }
   }
 
-  @Tool(
+  @McpTool(
       name = "get_feel_version",
       description = "Return the version of the FEEL-Scala engine used to evaluate expressions.")
   public VersionResponse getFeelVersion() {
