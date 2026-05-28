@@ -7,12 +7,10 @@
  */
 package org.camunda.feel.playground.sevice;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
-import org.camunda.feel.api.EvaluationResult;
+import org.camunda.feel.FeelEngine;
 import org.camunda.feel.playground.dto.FeelEvaluationResponse;
-import org.camunda.feel.playground.dto.FeelEvaluationWarning;
+import org.camunda.feel.playground.dto.VersionResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.ai.tool.annotation.Tool;
@@ -49,7 +47,7 @@ public class FeelMcpTools {
 
     try {
       final var result = evaluationService.evaluate(expression, context);
-      return createEvaluationResponse(result);
+      return FeelEvaluationResponse.of(result);
 
     } catch (final Exception e) {
       return FeelEvaluationResponse.withError(e.getMessage());
@@ -75,7 +73,7 @@ public class FeelMcpTools {
 
     try {
       final var result = evaluationService.evaluateUnaryTests(expression, inputValue, context);
-      return createEvaluationResponse(result);
+      return FeelEvaluationResponse.of(result);
 
     } catch (final Exception e) {
       return FeelEvaluationResponse.withError(e.getMessage());
@@ -85,34 +83,10 @@ public class FeelMcpTools {
     }
   }
 
-  private static FeelEvaluationResponse createEvaluationResponse(final EvaluationResult result) {
-    final var warnings = collectEvaluationWarnings(result);
-
-    if (result.isSuccess()) {
-      final var response = FeelEvaluationResponse.withResult(result.result());
-      response.setWarnings(warnings);
-      return response;
-    } else {
-      final var failureMessage = result.failure().message();
-      final var response = FeelEvaluationResponse.withError(failureMessage);
-      response.setWarnings(warnings);
-      return response;
-    }
-  }
-
-  private static List<FeelEvaluationWarning> collectEvaluationWarnings(
-      final EvaluationResult result) {
-    final var warnings = new ArrayList<FeelEvaluationWarning>();
-    result
-        .suppressedFailures()
-        .foreach(
-            failure -> {
-              final var warning =
-                  FeelEvaluationWarning.of(
-                      failure.failureType().toString(), failure.failureMessage());
-              warnings.add(warning);
-              return null;
-            });
-    return warnings;
+  @Tool(
+      name = "get_feel_version",
+      description = "Return the version of the FEEL-Scala engine used to evaluate expressions.")
+  public VersionResponse getFeelVersion() {
+    return VersionResponse.withVersion(FeelEngine.class.getPackage().getImplementationVersion());
   }
 }

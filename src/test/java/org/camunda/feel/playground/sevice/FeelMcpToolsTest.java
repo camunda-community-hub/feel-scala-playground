@@ -86,4 +86,11 @@ public final class FeelMcpToolsTest {
             org.mockito.ArgumentMatchers.argThat(
                 metadata -> "feel-scala-mcp".equals(metadata.get("source"))));
   }
+
+  @Test
+  void shouldReturnFeelVersion() {
+    final var response = feelMcpTools.getFeelVersion();
+
+    assertThat(response.getFeelEngineVersion()).isNotNull();
+  }
 }

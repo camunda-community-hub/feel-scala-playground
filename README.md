@@ -154,6 +154,10 @@ Evaluates a FEEL unary-tests expression against an input value with an optional 
 | `inputValue` | any         | yes      | The input value to test against                      |
 | `context`    | JSON object | no       | Context variables available to the expression        |
 
+#### `get_feel_version`
+
+Returns the version of the FEEL-Scala engine used to evaluate expressions. Takes no parameters.
+
 ### MCP Client Configuration Example
 
 To connect an MCP client (e.g. Claude Desktop) to the server, use the following configuration:
