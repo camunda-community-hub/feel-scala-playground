@@ -17,6 +17,7 @@ public final class FeelEvaluationResponse {
   public String error;
 
   public List<FeelEvaluationWarning> warnings;
+  public Long evaluationTimeInMillis;
 
   public Object getResult() {
     return result;
@@ -52,6 +53,14 @@ public final class FeelEvaluationResponse {
     final var response = new FeelEvaluationResponse();
     response.setError(error);
     return response;
+  }
+
+  public Long getEvaluationTimeInMillis() {
+    return evaluationTimeInMillis;
+  }
+
+  public void setEvaluationTimeInMillis(final Long evaluationTimeInMillis) {
+    this.evaluationTimeInMillis = evaluationTimeInMillis;
   }
 
   public static FeelEvaluationResponse of(EvaluationResult result) {

@@ -48,13 +48,18 @@ public class FeelMcpTools {
           final Map<String, Object> context) {
 
     LOG.debug("Evaluate FEEL expression via MCP: {}", expression);
+    final long startTime = System.nanoTime();
 
     try {
       final var result = evaluationService.evaluate(expression, context);
-      return FeelEvaluationResponse.of(result);
+      final var response = FeelEvaluationResponse.of(result);
+      response.setEvaluationTimeInMillis((System.nanoTime() - startTime) / 1_000_000);
+      return response;
 
     } catch (final Exception e) {
-      return FeelEvaluationResponse.withError(e.getMessage());
+      final var response = FeelEvaluationResponse.withError(e.getMessage());
+      response.setEvaluationTimeInMillis((System.nanoTime() - startTime) / 1_000_000);
+      return response;
 
     } finally {
       trackingService.trackExpressionEvaluation(MCP_METADATA);
@@ -80,13 +85,18 @@ public class FeelMcpTools {
           final Map<String, Object> context) {
 
     LOG.debug("Evaluate FEEL unary-tests expression via MCP: {}", expression);
+    final long startTime = System.nanoTime();
 
     try {
       final var result = evaluationService.evaluateUnaryTests(expression, inputValue, context);
-      return FeelEvaluationResponse.of(result);
+      final var response = FeelEvaluationResponse.of(result);
+      response.setEvaluationTimeInMillis((System.nanoTime() - startTime) / 1_000_000);
+      return response;
 
     } catch (final Exception e) {
-      return FeelEvaluationResponse.withError(e.getMessage());
+      final var response = FeelEvaluationResponse.withError(e.getMessage());
+      response.setEvaluationTimeInMillis((System.nanoTime() - startTime) / 1_000_000);
+      return response;
 
     } finally {
       trackingService.trackUnaryTestsExpressionEvaluation(MCP_METADATA);
