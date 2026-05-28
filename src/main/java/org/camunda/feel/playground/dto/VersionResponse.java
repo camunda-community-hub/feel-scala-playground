@@ -7,7 +7,6 @@
  */
 package org.camunda.feel.playground.dto;
 
-import org.camunda.feel.FeelEngine;
 
 public final class VersionResponse {
 

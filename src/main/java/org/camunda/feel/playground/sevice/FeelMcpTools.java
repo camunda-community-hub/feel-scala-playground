@@ -8,7 +8,6 @@
 package org.camunda.feel.playground.sevice;
 
 import java.util.Map;
-
 import org.camunda.feel.playground.api.VersionController;
 import org.camunda.feel.playground.dto.FeelEvaluationResponse;
 import org.camunda.feel.playground.dto.VersionResponse;
