@@ -159,9 +159,13 @@ Evaluates a FEEL unary-tests expression against an input value with an optional 
 | `inputValue` | any         | yes      | The input value to test against                      |
 | `context`    | JSON object | no       | Context variables available to the expression        |
 
-#### `get_feel_version`
+### Resources
 
-Returns the version of the FEEL-Scala engine used to evaluate expressions. Takes no parameters.
+The following resources are exposed:
+
+#### `feel://version`
+
+Returns the version of the FEEL-Scala engine used to evaluate expressions.
 
 ### MCP Client Configuration Example
 
