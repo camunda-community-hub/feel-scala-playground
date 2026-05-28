@@ -53,12 +53,12 @@ public class FeelMcpTools {
     try {
       final var result = evaluationService.evaluate(expression, context);
       final var response = FeelEvaluationResponse.of(result);
-      response.setEvaluationTime((System.nanoTime() - startTime) / 1_000_000);
+      response.setEvaluationTimeInMillis((System.nanoTime() - startTime) / 1_000_000);
       return response;
 
     } catch (final Exception e) {
       final var response = FeelEvaluationResponse.withError(e.getMessage());
-      response.setEvaluationTime((System.nanoTime() - startTime) / 1_000_000);
+      response.setEvaluationTimeInMillis((System.nanoTime() - startTime) / 1_000_000);
       return response;
 
     } finally {
@@ -90,12 +90,12 @@ public class FeelMcpTools {
     try {
       final var result = evaluationService.evaluateUnaryTests(expression, inputValue, context);
       final var response = FeelEvaluationResponse.of(result);
-      response.setEvaluationTime((System.nanoTime() - startTime) / 1_000_000);
+      response.setEvaluationTimeInMillis((System.nanoTime() - startTime) / 1_000_000);
       return response;
 
     } catch (final Exception e) {
       final var response = FeelEvaluationResponse.withError(e.getMessage());
-      response.setEvaluationTime((System.nanoTime() - startTime) / 1_000_000);
+      response.setEvaluationTimeInMillis((System.nanoTime() - startTime) / 1_000_000);
       return response;
 
     } finally {

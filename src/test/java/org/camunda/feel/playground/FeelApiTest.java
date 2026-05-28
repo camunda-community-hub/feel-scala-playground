@@ -36,7 +36,7 @@ public final class FeelApiTest {
                 .content("{\"expression\": \"1 + x\", \"context\": {\"x\": 2}}"))
         .andExpect(status().isOk())
         .andExpect(content().json("{'result': 3}"))
-        .andExpect(jsonPath("$.evaluationTime").isNumber());
+        .andExpect(jsonPath("$.evaluationTimeInMillis").isNumber());
   }
 
   @CsvSource(
@@ -117,6 +117,6 @@ public final class FeelApiTest {
                 .content("{\"expression\": \"> x\", \"inputValue\": 5, \"context\": {\"x\": 2}}"))
         .andExpect(status().isOk())
         .andExpect(content().json("{'result': true}"))
-        .andExpect(jsonPath("$.evaluationTime").isNumber());
+        .andExpect(jsonPath("$.evaluationTimeInMillis").isNumber());
   }
 }

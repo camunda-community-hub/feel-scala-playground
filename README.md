@@ -66,7 +66,7 @@ Response:
   "result": 6,
   "error": null,
   "warnings": [],
-  "evaluationTime": 2
+  "evaluationTimeInMillis": 2
 }
 ```
 
@@ -102,7 +102,7 @@ Response:
   "result": true,
   "error": null,
   "warnings": [],
-  "evaluationTime": 2
+  "evaluationTimeInMillis": 2
 }
 ```
 

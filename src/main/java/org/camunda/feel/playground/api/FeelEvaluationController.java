@@ -1,5 +1,7 @@
 package org.camunda.feel.playground.api;
 
+import java.time.Duration;
+import java.time.Instant;
 import org.camunda.feel.playground.dto.FeelEvaluationRequest;
 import org.camunda.feel.playground.dto.FeelEvaluationResponse;
 import org.camunda.feel.playground.dto.FeelUnaryTestsEvaluationRequest;
@@ -36,17 +38,17 @@ public class FeelEvaluationController {
       @RequestBody FeelEvaluationRequest request) {
 
     LOG.debug("Evaluate FEEL expression: {}", request);
-    final long startTime = System.nanoTime();
+    final var startTime = Instant.now();
 
     try {
       final var result = evaluationService.evaluate(request.expression, request.context);
       final var response = FeelEvaluationResponse.of(result);
-      response.setEvaluationTime((System.nanoTime() - startTime) / 1_000_000);
+      response.setEvaluationTimeInMillis(Duration.between(startTime, Instant.now()).toMillis());
       return new ResponseEntity<>(response, HttpStatus.OK);
 
     } catch (Exception e) {
       final var response = FeelEvaluationResponse.withError(e.getMessage());
-      response.setEvaluationTime((System.nanoTime() - startTime) / 1_000_000);
+      response.setEvaluationTimeInMillis(Duration.between(startTime, Instant.now()).toMillis());
       return new ResponseEntity<>(response, HttpStatus.OK);
 
     } finally {
@@ -59,7 +61,7 @@ public class FeelEvaluationController {
       @RequestBody FeelUnaryTestsEvaluationRequest request) {
 
     LOG.debug("Evaluate FEEL unary-tests expression: {}", request);
-    final long startTime = System.nanoTime();
+    final var startTime = Instant.now();
 
     try {
       final var result =
@@ -67,12 +69,12 @@ public class FeelEvaluationController {
               request.expression, request.inputValue, request.context);
 
       final var response = FeelEvaluationResponse.of(result);
-      response.setEvaluationTime((System.nanoTime() - startTime) / 1_000_000);
+      response.setEvaluationTimeInMillis(Duration.between(startTime, Instant.now()).toMillis());
       return new ResponseEntity<>(response, HttpStatus.OK);
 
     } catch (Exception e) {
       final var response = FeelEvaluationResponse.withError(e.getMessage());
-      response.setEvaluationTime((System.nanoTime() - startTime) / 1_000_000);
+      response.setEvaluationTimeInMillis(Duration.between(startTime, Instant.now()).toMillis());
       return new ResponseEntity<>(response, HttpStatus.OK);
 
     } finally {

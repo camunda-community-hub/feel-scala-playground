@@ -242,8 +242,8 @@ async function evaluateCurrent() {
     } else {
       setOutput(formatJson(data.result), data.warnings || []);
     }
-    if (typeof data.evaluationTime === "number") {
-      evaluationTimeField.textContent = `${data.evaluationTime} ms`;
+    if (typeof data.evaluationTimeInMillis === "number") {
+      evaluationTimeField.textContent = `${data.evaluationTimeInMillis} ms`;
     } else {
       evaluationTimeField.textContent = "—";
     }
