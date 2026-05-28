@@ -4,7 +4,11 @@
 
 # FEEL-Scala Playground
 
-This repository contains an API and a lightweight playground frontend for evaluating FEEL expressions using the [FEEL-Scala engine](https://github.com/camunda/feel-scala).
+The playground allows evaluating FEEL expressions using the [FEEL-Scala engine](https://github.com/camunda/feel-scala). It contains:
+
+- An interactive frontend for users
+- A REST API for programmatic access
+- An MCP (Model Context Protocol) server for AI model integration
 
 ## Install
 
@@ -14,14 +18,15 @@ The application is available as a Docker image. You can run it with the followin
 docker run -p 8080:8080 ghcr.io/camunda-community-hub/feel-scala-playground
 ```
 
-- Playground: http://localhost:8080/playground
-- API endpoints: `http://localhost:8080/api/v1/*` 
+- Playground frontend: http://localhost:8080/playground
+- API endpoints: `http://localhost:8080/api/v1/*`
+- MCP server: `http://localhost:8080/sse` (SSE endpoint), `http://localhost:8080/mcp/message` (message endpoint)
 
 ## Usage
 
 The API has the following endpoints.
 
-Example request: 
+Example request:
 
 ```bash
 curl --header "Content-Type: application/json" \
