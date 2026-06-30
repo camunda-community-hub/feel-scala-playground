@@ -16,7 +16,9 @@ public class MixpanelTrackingService implements TrackingService {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(MixpanelTrackingService.class);
 
-  private final MixpanelAPI mixpanelAPI = new MixpanelAPI();
+  private static final String MIXPANEL_API_URL = "https://api-eu.mixpanel.com";
+
+  private final MixpanelAPI mixpanelAPI = new MixpanelAPI(MIXPANEL_API_URL + "/track", MIXPANEL_API_URL + "/engage");
 
   private final MessageBuilder messageBuilder;
 
