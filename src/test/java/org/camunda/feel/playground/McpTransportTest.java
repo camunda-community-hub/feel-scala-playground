@@ -20,10 +20,13 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
+import tools.jackson.databind.json.JsonMapper;
 
 /** Verifies that the MCP server is reachable via the Streamable HTTP transport. */
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public final class McpTransportTest {
+
+  private static final JsonMapper JSON = JsonMapper.builder().build();
 
   @LocalServerPort private int port;
 
@@ -62,9 +65,15 @@ public final class McpTransportTest {
                 "evaluate_feel_expression", Map.of("expression", "1 + 2")));
 
     assertThat(result.isError()).isNotEqualTo(true);
-    assertThat(result.content())
-        .filteredOn(TextContent.class::isInstance)
-        .map(c -> ((TextContent) c).text())
-        .anyMatch(text -> text.contains("3"));
+    final var text =
+        result.content().stream()
+            .filter(TextContent.class::isInstance)
+            .map(c -> ((TextContent) c).text())
+            .findFirst()
+            .orElseThrow();
+    final var response = JSON.readTree(text);
+
+    assertThat(response.get("result").asInt()).isEqualTo(3);
+    assertThat(response.path("error").isNull() || response.path("error").isMissingNode()).isTrue();
   }
 }
