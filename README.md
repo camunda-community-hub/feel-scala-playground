@@ -133,10 +133,11 @@ The application exposes the FEEL evaluation API as an [MCP (Model Context Protoc
 
 ### Connection
 
-The MCP server uses the SSE (Server-Sent Events) transport and is available at:
+The MCP server uses the [Streamable HTTP](https://modelcontextprotocol.io/specification/2025-06-18/basic/transports#streamable-http) transport and is available at:
 
-- SSE endpoint: `http://localhost:8080/sse`
-- Message endpoint: `http://localhost:8080/mcp/message`
+- MCP endpoint: `http://localhost:8080/mcp`
+
+The legacy HTTP+SSE transport (`/sse`, `/mcp/message`) is no longer served. Clients that used it must switch to the `/mcp` URL.
 
 ### Tools
 
@@ -171,13 +172,22 @@ Returns the version of the FEEL-Scala engine used to evaluate expressions.
 
 ### MCP Client Configuration Example
 
-To connect an MCP client (e.g. Claude Desktop) to the server, use the following configuration:
+**Claude (claude.ai):** add a custom connector (Settings > Connectors > Add custom connector) with the URL `https://<host>/mcp`.
+
+**Claude Code:**
+
+```shell
+claude mcp add --transport http feel http://localhost:8080/mcp
+```
+
+**Other MCP clients:** point the client at the Streamable HTTP endpoint, for example:
 
 ```json
 {
   "mcpServers": {
     "feel-scala-mcp": {
-      "url": "http://localhost:8080/sse"
+      "type": "http",
+      "url": "http://localhost:8080/mcp"
     }
   }
 }
